@@ -12,7 +12,7 @@ class HomeController extends Controller
     {
         $menuCategories = Category::menuItems()->take(7)->get();
 
-        return Inertia::render('Home', [
+        return Inertia::render('Shop/Home', [
             'menuCategories' => $menuCategories,
         ]);
     }

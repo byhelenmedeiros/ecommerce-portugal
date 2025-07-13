@@ -14,7 +14,11 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sarina: ['Sarina', ...defaultTheme.fontFamily.sans],
             },
+             fontWeight: {
+      extrabold: '800',
+    },
         },
     },
 

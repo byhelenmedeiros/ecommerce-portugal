@@ -46,4 +46,9 @@ class Product extends Model
     {
         return $this->belongsToMany(User::class, 'wishlists');
     }
+    public function subcategory()
+{
+    return $this->belongsTo(Subcategory::class);
+}
+
 }

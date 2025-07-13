@@ -8,9 +8,9 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faUser, faCartShopping, faMoon,faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faCartShopping, faMoon,faHeart, faSearch } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faUser, faCartShopping, faMoon, faHeart);
+library.add(faUser, faCartShopping, faMoon, faHeart, faSearch);
 
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';

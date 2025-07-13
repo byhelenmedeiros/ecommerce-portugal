@@ -1,24 +1,25 @@
 <template>
-  <form @submit.prevent="submit" class="flex items-center gap-2 w-full max-w-xl">
+  <form @submit.prevent="submit" class="relative w-full max-w-xl">
     <input
       v-model="query"
       type="text"
       :placeholder="placeholder"
       @focus="handleFocus"
       @blur="handleBlur"
-      class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-800 text-sm shadow-sm transition focus:outline-none focus:ring-2 focus:ring-red-500"
+      class="w-full px-4 py-2 pr-10 rounded-lg border border-gray-300 bg-white text-sm text-gray-800 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500"
     />
     <button
       type="submit"
-      class="px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-semibold hover:bg-red-600 transition"
+      class="absolute right-3 top-1/2 -translate-y-1/2 text-green-600 hover:text-red-600 transition text-base"
     >
-      Buscar
+      <font-awesome-icon :icon="['fas', 'search']" />
     </button>
   </form>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const query = ref('')
 const placeholder = ref('Pesquisar...')

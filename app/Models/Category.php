@@ -16,5 +16,19 @@ class Category extends Model
 {
     return $this->hasMany(Subcategory::class);
 }
+public function scopeMenuItems($query)
+{
+    return $query->where('show_in_menu', true)
+                 ->orderBy('menu_order');
+}
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+    
 
 }

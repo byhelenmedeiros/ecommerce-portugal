@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\CustomerProfileController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\HomeController;
 
 
 /*
@@ -23,6 +24,9 @@ use App\Http\Controllers\OrderController;
 Route::get('/', function () {
     return Inertia::render('Shop/Home');
 });
+
+Route::get('/', [HomeController::class, 'index']);
+
 
 
 Route::get('/search', function () {

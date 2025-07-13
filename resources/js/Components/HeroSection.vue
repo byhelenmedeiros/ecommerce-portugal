@@ -1,7 +1,7 @@
 <template>
   <section class="relative overflow-hidden bg-cover bg-center h-[70vh]" style="background-image: url('/images/bg-hero.jpg')">
     <!-- Overlay verde com opacidade -->
-    <div class="absolute inset-0 bg-green-700/70 z-0"></div>
+    <div class="absolute inset-0 bg-green-700/90 z-0"></div>
 
     <!-- Nome discreto no fundo -->
     <div class="absolute text-[8rem] sm:text-[16rem] font-bold font-sarina text-white opacity-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none select-none">
@@ -13,7 +13,7 @@
       <!-- Texto -->
       <div class="space-y-6 text-white">
       
-      <div class="inline-block bg-white bg-opacity-25 text-green-600 text-xs font-semibold px-3 py-1 rounded-full shadow">
+      <div class="inline-block bg-white bg-opacity-25  text-xs font-semibold px-3 py-1 rounded-full shadow">
   Produtos regionais do Norte na sua casa
 </div>
 
@@ -22,6 +22,7 @@
         </h2>
         <p class="text-base sm:text-lg text-green-100">
           Produtos autênticos, sabores únicos, entregues com carinho. Explore agora.
+
         </p>
         <a href="/shop" class="inline-block px-6 py-3 bg-white text-green-700 font-semibold rounded-full shadow hover:bg-red-600 hover:text-white transition">
           Comprar Agora
@@ -30,7 +31,7 @@
 
       <!-- Imagem do produto -->
       <div class="flex justify-center md:justify-end">
-        <img src="/images/produto-destaque.png" alt="Produto destaque" class="w-[300px] md:w-[400px] object-contain drop-shadow-xl" />
+        <img src="/images/pessoas_vinho.jpg" alt="Produto destaque" class="w-[300px] md:w-[400px] object-contain drop-shadow-xl" />
       </div>
     </div>
 

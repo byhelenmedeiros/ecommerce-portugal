@@ -244,7 +244,7 @@ const tabs = [
   'Estoque & Visibilidade',
   'SEO',
   'Informações Avançadas',
-  'Ficheiros',
+  //'Ficheiros',
   
 ];
 

@@ -68,7 +68,7 @@
             <!-- Imagens -->
             <div v-if="activeTab === 'Imagens'">
                 <InputLabel for="images" value="Imagens do Produto" />
-                <FilePond name="images" ref="pond" allowMultiple accepted-file-types="image/jpeg, image/png"
+                <FilePond name="images" ref="pond" imageCropAspectRatio="1:1"  allowMultiple accepted-file-types="image/jpeg, image/png"
                     label-idle="Arraste ou clique para fazer upload..." @updatefiles="handleFilePondUpdate"
                     class="filepond-horizontal w-full" />
 
@@ -98,6 +98,8 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
+
 
 
 const FilePond = vueFilePond(FilePondPluginImagePreview, FilePondPluginFileValidateType);

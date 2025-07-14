@@ -1,12 +1,14 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue'
-import Herosection from '@/Components/Herosection.vue'
+import HeroSection from '@/Components/HeroSection.vue'
+import Category from '@/Components/Category.vue'
 </script>
 
 <template>
   
   <GuestLayout>
-    <Herosection />
+    <HeroSection />
+    <Category />
     
   </GuestLayout>
 </template>

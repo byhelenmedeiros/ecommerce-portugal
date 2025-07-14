@@ -67,19 +67,20 @@
     </div>
 
     <!-- Paginação -->
-    <div class="mt-4 flex justify-center text-sm space-x-2">
-      <button
-        v-for="link in products.meta.links"
-        :key="link.label"
-        v-html="link.label"
-        :disabled="!link.url"
-        @click="goToPage(link.url)"
-        :class="[
-          'px-3 py-1 border rounded',
-          link.active ? 'bg-green-700 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
-        ]"
-      />
-    </div>
+ <div v-if="products?.meta?.links?.length" class="mt-4 flex justify-center text-sm space-x-2">
+  <button
+    v-for="link in products.meta.links"
+    :key="link.label"
+    v-html="link.label"
+    :disabled="!link.url"
+    @click="goToPage(link.url)"
+    :class="[
+      'px-3 py-1 border rounded',
+      link.active ? 'bg-green-700 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
+    ]"
+  />
+</div>
+
   </AdminLayout>
 </template>
 

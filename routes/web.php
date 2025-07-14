@@ -39,11 +39,14 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/profile/edit', [CustomerProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile/update', [CustomerProfileController::class, 'update'])->name('profile.update');
+    // Dados de conta (nome/email/senha)
+    Route::get('/conta', [ProfileController::class, 'edit'])->name('account.edit');
+    Route::patch('/conta', [ProfileController::class, 'update'])->name('account.update');
+    Route::delete('/conta', [ProfileController::class, 'destroy'])->name('account.destroy');
+
+    // Dados do perfil complementar (morada, telefone, etc.)
+    Route::get('/perfil', [CustomerProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/perfil', [CustomerProfileController::class, 'update'])->name('profile.update');
 });
 
 require __DIR__.'/auth.php';

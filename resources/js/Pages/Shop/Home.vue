@@ -2,6 +2,10 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 import HeroSection from '@/Components/HeroSection.vue'
 import Category from '@/Components/Category.vue'
+import Bestselling from '@/Components/bestselling.vue'
+import Cta_home from '@/Components/Cta_home.vue'
+import InfoBanner from '@/Components/InfoBanner.vue'
+import Footer from '@/Components/Footer.vue'
 </script>
 
 <template>
@@ -9,6 +13,10 @@ import Category from '@/Components/Category.vue'
   <GuestLayout>
     <HeroSection />
     <Category />
-    
+       <InfoBanner />
+    <Bestselling />
+    <Cta_home />
+ 
+    <Footer />
   </GuestLayout>
 </template>

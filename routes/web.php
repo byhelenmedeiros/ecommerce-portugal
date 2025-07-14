@@ -52,3 +52,4 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 require __DIR__.'/modules/admin.php';
 require __DIR__.'/modules/shop.php';
+require __DIR__.'/modules/product.php';

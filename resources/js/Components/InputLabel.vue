@@ -1,9 +1,12 @@
 <template>
-  <label class="block font-medium text-sm text-gray-700" :for="for">
-    <slot />
+  <label :for="for" class="block text-gray-700 text-xs font-semibold mb-1">
+    <slot>{{ value }}</slot>
   </label>
 </template>
 
 <script setup>
-defineProps({ for: String });
+defineProps({
+  for: String,
+  value: String,
+});
 </script>

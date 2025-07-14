@@ -35,8 +35,16 @@ class ProductController extends Controller
             'region_id' => 'nullable|exists:regions,id',
         ]);
 
-        Product::create($data);
-        return redirect()->route('admin.products.index')->with('success', 'Produto criado com sucesso.');
+$product = Product::create($data);
+
+if ($request->hasFile('images')) {
+    foreach ($request->file('images') as $image) {
+        $path = $image->store('products', 'public');
+        $product->images()->create(['path' => $path]);
+    }
+}
+
+return redirect()->route('admin.products.index')->with('success', 'Produto criado com sucesso.');
     }
 
     public function edit(Product $product)

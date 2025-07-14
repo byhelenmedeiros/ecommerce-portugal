@@ -13,3 +13,8 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.filepond--item {
+  width: calc(25% - 0.5em); /* mostra 4 imagens por linha com espaço */
+  margin-right: 0.5em;
+}

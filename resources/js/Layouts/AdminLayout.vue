@@ -9,10 +9,22 @@
             <font-awesome-icon icon="fa-solid fa-chart-line" class="text-green-600" />
             Dashboard
           </Link>
-          <Link :href="route('admin.products.index')" class="flex items-center gap-3 px-3 py-2 rounded hover:bg-green-100">
-            <font-awesome-icon icon="fa-solid fa-boxes-stacked" class="text-green-600" />
-            Produtos
-          </Link>
+          <!-- Produtos (submenu) -->
+<div class="space-y-1">
+  <div class="flex items-center gap-3 px-3 py-2 text-sm font-semibold text-green-700">
+    <font-awesome-icon icon="fa-solid fa-boxes-stacked" class="text-green-600" />
+    Produtos
+  </div>
+  <div class="ml-6 space-y-1 text-sm">
+    <Link :href="route('admin.products.index')" class="block px-3 py-2 rounded hover:bg-green-100">
+      Todos os Produtos
+    </Link>
+    <Link :href="route('admin.products.create')" class="block px-3 py-2 rounded hover:bg-green-100">
+      Criar Produto
+    </Link>
+  </div>
+</div>
+
           <Link :href="route('admin.orders.index')" class="flex items-center gap-3 px-3 py-2 rounded hover:bg-green-100">
             <font-awesome-icon icon="fa-solid fa-file-invoice-dollar" class="text-green-600" />
             Pedidos

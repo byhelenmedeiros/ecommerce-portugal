@@ -5,7 +5,9 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\RegionController as AdminRegionController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Shop\OrderController;
 use App\Http\Controllers\Shop\WishlistController as ShopWishlistController;
+use App\Http\Controllers\ProfileController;
 
 // Rotas de administração (apenas para admin)
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {

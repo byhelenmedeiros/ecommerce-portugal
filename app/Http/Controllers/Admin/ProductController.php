@@ -10,29 +10,44 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-   public function index(Request $request)
-{
-    $query = Product::with('category', 'region');
+    public function index(Request $request)
+    {
+        $query = Product::with('category', 'region');
 
-    if ($request->search) {
-        $query->where('name', 'like', "%{$request->search}%");
+        if ($request->search) {
+            $query->where('name', 'like', "%{$request->search}%");
+        }
+
+        if ($request->category_id) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->region_id) {
+            $query->where('region_id', $request->region_id);
+        }
+        
+    if ($request->filled('sort')) {
+        $query->orderBy($request->sort, $request->input('direction', 'asc'));
     }
 
-    if ($request->category_id) {
-        $query->where('category_id', $request->category_id);
+
+        $products = Product::with('category', 'region')
+            ->when($request->search, fn($q) => $q->where('name', 'like', "%{$request->search}%"))
+            ->when($request->category_id, fn($q) => $q->where('category_id', $request->category_id))
+            ->when($request->region_id, fn($q) => $q->where('region_id', $request->region_id))
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+      return inertia('Admin/Products/Index', [
+        'products' => $products,
+        'filters' => $request->only(['search', 'category_id', 'region_id']),
+        'categories' => Category::all(),
+        'regions' => Region::all(),
+        'sortField' => $request->sort,
+        'sortDirection' => $request->direction
+    ]);
     }
-
-    if ($request->region_id) {
-        $query->where('region_id', $request->region_id);
-    }
-
-    $products = $query->paginate(10)->appends($request->query());
-    $categories = Category::all();
-    $regions = Region::all();
-
-    return inertia('Admin/Products/Index', compact('products', 'categories', 'regions'))
-        ->with('filters', $request->only(['search', 'category_id', 'region_id']));
-}
 
 
     public function create()
@@ -54,16 +69,16 @@ class ProductController extends Controller
             'region_id' => 'nullable|exists:regions,id',
         ]);
 
-$product = Product::create($data);
+        $product = Product::create($data);
 
-if ($request->hasFile('images')) {
-    foreach ($request->file('images') as $image) {
-        $path = $image->store('products', 'public');
-        $product->images()->create(['path' => $path]);
-    }
-}
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('products', 'public');
+                $product->images()->create(['path' => $path]);
+            }
+        }
 
-return redirect()->route('admin.products.index')->with('success', 'Produto criado com sucesso.');
+        return redirect()->route('admin.products.index')->with('success', 'Produto criado com sucesso.');
     }
 
     public function edit(Product $product)
@@ -90,12 +105,10 @@ return redirect()->route('admin.products.index')->with('success', 'Produto criad
     }
 
     public function destroy(Product $product)
-{
-    $this->authorize('delete', $product);
+    {
+        $this->authorize('delete', $product);
 
-    $product->delete();
-    return redirect()->route('admin.products.index')->with('success', 'Produto removido com sucesso.');
+        $product->delete();
+        return redirect()->route('admin.products.index')->with('success', 'Produto removido com sucesso.');
+    }
 }
-
-}
-

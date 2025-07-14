@@ -1,4 +1,8 @@
 <template>
+ 
+
+      <Head title="Gestão de loja" />
+
   <div class="min-h-screen flex bg-gray-100 text-gray-800">
     <!-- Sidebar -->
     <aside class="w-56 bg-white border-r shadow-sm hidden md:flex flex-col justify-start">

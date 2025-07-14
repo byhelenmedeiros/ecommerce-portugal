@@ -10,11 +10,30 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index()
-    {
-        $products = Product::with('category', 'region')->paginate(15);
-        return inertia('Admin/Products/Index', compact('products'));
+   public function index(Request $request)
+{
+    $query = Product::with('category', 'region');
+
+    if ($request->search) {
+        $query->where('name', 'like', "%{$request->search}%");
     }
+
+    if ($request->category_id) {
+        $query->where('category_id', $request->category_id);
+    }
+
+    if ($request->region_id) {
+        $query->where('region_id', $request->region_id);
+    }
+
+    $products = $query->paginate(10)->appends($request->query());
+    $categories = Category::all();
+    $regions = Region::all();
+
+    return inertia('Admin/Products/Index', compact('products', 'categories', 'regions'))
+        ->with('filters', $request->only(['search', 'category_id', 'region_id']));
+}
+
 
     public function create()
     {

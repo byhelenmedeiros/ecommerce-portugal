@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-green-50">
+  <div class="bg-white">
     <!-- Barra principal -->
     <nav class="mx-auto px-4 sm:px-6 lg:px-8 py-2">
       <div class="flex justify-between items-center h-16">

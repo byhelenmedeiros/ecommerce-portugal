@@ -10,37 +10,52 @@
             </button>
         </div>
 
-        <div class="bg-white shadow p-6 rounded-b-md">
-            <!-- Aba: Detalhes -->
-            <div v-if="activeTab === 'Detalhes'" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <InputLabel for="name" value="Nome do Produto" />
-                    <TextInput id="name" v-model="form.name" class="w-full h-8 text-xs" />
-                    <InputError :message="form.errors.name" />
-                </div>
-                <div>
-                    <InputLabel for="slug" value="Slug (URL amigável)" />
-                    <TextInput id="slug" v-model="form.slug" class="w-full h-8 text-xs" />
-                    <InputError :message="form.errors.slug" />
-                </div>
-                <div class="col-span-2">
-                    <InputLabel for="description" value="Descrição" />
-                    <textarea id="description" v-model="form.description" rows="3"
-                        class="w-full p-2 border rounded text-xs resize-none" />
-                    <InputError :message="form.errors.description" />
-                </div>
-                <div>
-                    <InputLabel for="status" value="Status do Produto" />
-                    <select id="status" v-model="form.status" class="w-full h-8 text-xs border rounded">
-                        <option value="rascunho">Rascunho</option>
-                        <option value="publicado">Publicado</option>
-                        <option value="esgotado">Esgotado</option>
-                    </select>
-                    <InputError :message="form.errors.status" />
-                </div>
 
-            </div>
+  <div class="bg-white shadow p-6 rounded-b-md">
+    <!-- Aba: Detalhes -->
+    <div v-if="activeTab === 'Detalhes'" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Nome -->
+      <div>
+        <InputLabel for="name" value="Nome do Produto" />
+        <TextInput id="name" v-model="form.name" class="w-full h-8 text-xs" />
+        <InputError :message="form.errors.name" />
+      </div>
 
+      <!-- Slug -->
+      <div>
+        <InputLabel for="slug" value="Slug (URL amigável)" />
+        <TextInput id="slug" v-model="form.slug" class="w-full h-8 text-xs" />
+        <InputError :message="form.errors.slug" />
+      </div>
+
+      <!-- Status -->
+      <div>
+        <InputLabel for="status" value="Status do Produto" />
+        <select id="status" v-model="form.status" class="w-full h-8 text-xs border rounded">
+          <option value="rascunho">Rascunho</option>
+          <option value="publicado">Publicado</option>
+          <option value="esgotado">Esgotado</option>
+        </select>
+        <InputError :message="form.errors.status" />
+      </div>
+
+      <!-- Descrição -->
+    <!-- Descrição -->
+<div class="md:col-span-2">
+  <InputLabel for="description" value="Descrição" />
+  <div class="border rounded text-sm overflow-hidden w-full">
+    <QuillEditor
+      id="description"
+      v-model:content="form.description"
+      content-type="html"
+      theme="snow"
+      class="w-full h-[200px] bg-white"
+    />
+  </div>
+  <InputError :message="form.errors.description" />
+</div>
+    </div>
+  
             <!-- Aba: Preço & Categoria -->
             <div v-if="activeTab === 'Preço & Categoria'" class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
@@ -65,7 +80,7 @@
                 <div>
                     <InputLabel for="region_id" value="Região" />
                     <select id="region_id" v-model="form.region_id" class="w-full h-8 text-xs border rounded">
-                        <option disabled value="">Seleciona...</option>
+                        <option disabled value="">Selecione</option>
                         <option v-for="reg in regions" :key="reg.id" :value="reg.id">{{ reg.name }}</option>
                     </select>
                     <InputError :message="form.errors.region_id" />
@@ -173,18 +188,18 @@
                     <TextInput id="visibility_end" v-model="form.visibility_end" type="date"
                         class="w-full h-8 text-xs" />
                 </div>
-          <!-- Aba: Ficheiros -->
-<div v-if="activeTab === 'Ficheiros'" class="space-y-2">
-    <InputLabel for="files" value="Ficheiros do Produto" />
-    <input type="file" id="files" @change="handleFileUpload" multiple class="w-full h-8 text-xs" />
-    <InputError :message="form.errors.files" />
-    <div v-if="form.files.length > 0" class="mt-2">
-        <h4 class="text-sm font-semibold">Ficheiros Selecionados:</h4>
-        <ul class="list-disc pl-5"> 
-            <li v-for="file in form.files" :key="file.name" class="text-xs">{{ file.name }}</li>
-        </ul>
-    </div>
-</div>
+                <!-- Aba: Ficheiros -->
+                <div v-if="activeTab === 'Ficheiros'" class="space-y-2">
+                    <InputLabel for="files" value="Ficheiros do Produto" />
+                    <input type="file" id="files" @change="handleFileUpload" multiple class="w-full h-8 text-xs" />
+                    <InputError :message="form.errors.files" />
+                    <div v-if="form.files.length > 0" class="mt-2">
+                        <h4 class="text-sm font-semibold">Ficheiros Selecionados:</h4>
+                        <ul class="list-disc pl-5">
+                            <li v-for="file in form.files" :key="file.name" class="text-xs">{{ file.name }}</li>
+                        </ul>
+                    </div>
+                </div>
 
 
 
@@ -200,7 +215,7 @@
         <!-- Botão -->
         <div class="text-end mt-4">
             <PrimaryButton class="bg-green-700 hover:bg-green-800 px-4 py-2 text-sm" :disabled="form.processing">
-                {{ props.product ? 'Atualizar' : 'Criar' }} Produto
+                {{ props.product ? 'Atualizar' : 'Publicar' }} Produto
             </PrimaryButton>
         </div>
     </form>
@@ -214,6 +229,8 @@ import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 import vueFilePond from 'vue-filepond';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
@@ -238,49 +255,49 @@ const props = defineProps({
 
 // Abas visíveis no topo do formulário
 const tabs = [
-  'Detalhes',
-  'Preço & Categoria',
-  'Imagens',
-  'Estoque & Visibilidade',
-  'SEO',
-  'Informações Avançadas',
-  //'Ficheiros',
-  
+    'Detalhes',
+    'Preço & Categoria',
+    'Imagens',
+    'Estoque & Visibilidade',
+    'SEO',
+    'Informações Avançadas',
+    //'Ficheiros',
+
 ];
 
 const activeTab = ref('Detalhes');
 
 // Formulário com valores iniciais
 const form = useForm({
-  name: '',
-  slug: '',
-  description: '',
-  price: '',
-  discount: '',
-  category_id: '',
-  region_id: '',
-  images: [],
-  files: [],
-  stock: '',
-  weight: '',
-  visible: false,
-  featured: false,
-  release_date: '',
-  seo_title: '',
-  seo_description: '',
-  ean: '',
-  sku: '',
-  brand: '',
-  unit: '',
-  min_order_quantity: '',
-  max_order_quantity: '',
-  shipping_time: '',
-  expiration_date: '',
-  visibility_start: '',
-  visibility_end: '',
-  status: 'rascunho',
-  comments: '',
-  is_active: true,
+    name: '',
+    slug: '',
+    description: '',
+    price: '',
+    discount: '',
+    category_id: '',
+    region_id: '',
+    images: [],
+    files: [],
+    stock: '',
+    weight: '',
+    visible: false,
+    featured: false,
+    release_date: '',
+    seo_title: '',
+    seo_description: '',
+    ean: '',
+    sku: '',
+    brand: '',
+    unit: '',
+    min_order_quantity: '',
+    max_order_quantity: '',
+    shipping_time: '',
+    expiration_date: '',
+    visibility_start: '',
+    visibility_end: '',
+    status: 'rascunho',
+    comments: '',
+    is_active: true,
 });
 
 
@@ -292,26 +309,26 @@ const handleFilePondUpdate = (files) => {
 form.files = [];
 
 const handleFileUpload = (e) => {
-  form.files = Array.from(e.target.files);
+    form.files = Array.from(e.target.files);
 };
 
- 
+
 const submit = () => {
-  const formData = new FormData();
+    const formData = new FormData();
 
-  Object.entries(form.data()).forEach(([key, value]) => {
-    if (key === 'images' || key === 'files') {
-      value.forEach((file, i) => {
-        formData.append(`${key}[${i}]`, file);
-      });
-    } else {
-      formData.append(key, value);
-    }
-  });
+    Object.entries(form.data()).forEach(([key, value]) => {
+        if (key === 'images' || key === 'files') {
+            value.forEach((file, i) => {
+                formData.append(`${key}[${i}]`, file);
+            });
+        } else {
+            formData.append(key, value);
+        }
+    });
 
-  form.post(route('admin.products.store'), {
-    forceFormData: true,
-  });
+    form.post(route('admin.products.store'), {
+        forceFormData: true,
+    });
 };
 
 </script>

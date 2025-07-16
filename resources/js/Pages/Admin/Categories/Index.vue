@@ -1,5 +1,8 @@
 <template>
+  <Head title="Gerir categorias" />
   <AdminLayout title="Categorias">
+    
+  <h1 class="text-md font-bold  text-black">Gerir Categorias</h1>
     <template #header>
       <h2 class="text-base font-semibold text-gray-800 leading-tight">Categorias</h2>
     </template>
@@ -114,11 +117,39 @@ const form = useForm({
 
 const submit = () => {
   if (form.id) {
-    form.put(route('admin.categories.update', form.id));
+    form.put(route('admin.categories.update', form.id), {
+      onSuccess: () => {
+        // Atualiza a categoria na lista existente
+        const index = sortedCategories.value.findIndex(c => c.id === form.id);
+        if (index !== -1) {
+          sortedCategories.value[index] = { ...form.data(), id: form.id };
+        }
+        resetForm();
+      }
+    });
   } else {
-    form.post(route('admin.categories.store'));
+    form.post(route('admin.categories.store'), {
+      preserveScroll: true,
+      onSuccess: (res) => {
+        if (res?.props?.category) {
+          sortedCategories.value.push(res.props.category);
+        } else {
+          sortedCategories.value = [...sortedCategories.value, { ...form.data(), id: new Date().getTime() }];
+        }
+        resetForm();
+      }
+    });
   }
 };
+const resetForm = () => {
+  form.id = null;
+  form.name = '';
+  form.slug = '';
+  form.order = 0;
+  form.parent_id = null;
+};
+
+
 
 const destroy = (id) => {
   if (confirm('Tem certeza que deseja excluir esta categoria?')) {

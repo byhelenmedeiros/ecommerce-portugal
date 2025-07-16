@@ -19,20 +19,22 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => ['required', 'string'],
-            'slug' => ['required', 'string', 'unique:categories,slug'],
-            'order' => ['nullable', 'integer'],
-            'parent_id' => ['nullable', 'exists:categories,id'],
-        ]);
+ 
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'slug' => 'required|string|max:255|unique:categories',
+        'order' => 'nullable|integer',
+        'parent_id' => 'nullable|exists:categories,id',
+    ]);
 
-        Category::create($validated);
+    $category = Category::create($validated);
 
-        return redirect()->route('admin.categories.index')
-            ->with('success', 'Categoria criada com sucesso.');
-    }
+    return redirect()->route('admin.categories.index')
+        ->with('success', 'Categoria criada com sucesso.');
+}
+
 
     public function edit(Category $category)
     {

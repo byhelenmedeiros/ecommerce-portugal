@@ -23,7 +23,7 @@
               </span>
               <font-awesome-icon :icon="isOpenProdutos ? 'fa-chevron-up' : 'fa-chevron-down'" class="text-xs" />
             </button>
-            <div v-if="isOpenProdutos" class="ml-6 space-y-1 text-sm">
+            <div v-if="isOpenProdutos" class="ml-6 space-y-1 text-xs">
               <Link :href="route('admin.products.index')" class="block px-3 py-2 rounded hover:bg-green-100">Todos os Produtos</Link>
               <Link :href="route('admin.products.create')" class="block px-3 py-2 rounded hover:bg-green-100">Criar Produto</Link>
             </div>
@@ -38,9 +38,8 @@
               </span>
               <font-awesome-icon :icon="isOpenCategorias ? 'fa-chevron-up' : 'fa-chevron-down'" class="text-xs" />
             </button>
-            <div v-if="isOpenCategorias" class="ml-6 space-y-1 text-sm">
+            <div v-if="isOpenCategorias" class="ml-6 space-y-1 text-xs">
               <Link :href="route('admin.categories.index')" class="block px-3 py-2 rounded hover:bg-green-100">Ver Categorias</Link>
-              <Link :href="route('admin.categories.create')" class="block px-3 py-2 rounded hover:bg-green-100">Nova Categoria</Link>
             </div>
           </div>
 
@@ -53,7 +52,7 @@
               </span>
               <font-awesome-icon :icon="isOpenPedidos ? 'fa-chevron-up' : 'fa-chevron-down'" class="text-xs" />
             </button>
-            <div v-if="isOpenPedidos" class="ml-6 space-y-1 text-sm">
+            <div v-if="isOpenPedidos" class="ml-6 space-y-1 text-xs">
               <Link :href="route('admin.orders.index')" class="block px-3 py-2 rounded hover:bg-green-100">Todos os Pedidos</Link>
               <!-- Adicione outras rotas de pedidos aqui se existirem -->
             </div>

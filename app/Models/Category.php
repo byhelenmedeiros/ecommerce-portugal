@@ -29,6 +29,11 @@ public function scopeMenuItems($query)
     {
         return $query->where('is_active', false);
     }
+    public function parent()
+{
+    return $this->belongsTo(Category::class, 'parent_id');
+}
+
     
 
 }

@@ -1,54 +1,69 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::paginate(10);
-        return inertia('Admin/Categories/Index', compact('categories'));
-    }
+        $categories = Category::orderBy('order')
+            ->with('parent')
+            ->get();
 
-    public function create()
-    {
-        return inertia('Admin/Categories/Create');
+        return Inertia::render('Admin/Categories/Index', [
+            'categories' => $categories
+        ]);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:categories',
+        $validated = $request->validate([
+            'name' => ['required', 'string'],
+            'slug' => ['required', 'string', 'unique:categories,slug'],
+            'order' => ['nullable', 'integer'],
+            'parent_id' => ['nullable', 'exists:categories,id'],
         ]);
 
-        Category::create($request->only('name', 'slug'));
-        return redirect()->route('admin.categories.index');
+        Category::create($validated);
+
+        return redirect()->route('admin.categories.index')
+            ->with('success', 'Categoria criada com sucesso.');
     }
 
     public function edit(Category $category)
     {
-        return inertia('Admin/Categories/Edit', compact('category'));
+        $categories = Category::where('id', '!=', $category->id)->get();
+
+        return Inertia::render('Admin/Categories/Index', [
+            'category' => $category,
+            'categories' => $categories,
+        ]);
     }
 
     public function update(Request $request, Category $category)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:categories,slug,' . $category->id,
+        $validated = $request->validate([
+            'name' => ['required', 'string'],
+            'slug' => ['required', 'string', 'unique:categories,slug,' . $category->id],
+            'order' => ['nullable', 'integer'],
+            'parent_id' => ['nullable', 'exists:categories,id'],
         ]);
 
-        $category->update($request->only('name', 'slug'));
-        return redirect()->route('admin.categories.index');
+        $category->update($validated);
+
+        return redirect()->route('admin.categories.index')
+            ->with('success', 'Categoria atualizada com sucesso.');
     }
 
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect()->route('admin.categories.index');
+
+        return redirect()->route('admin.categories.index')
+            ->with('success', 'Categoria removida com sucesso.');
     }
 }

@@ -14,6 +14,12 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/products/{product}/comments/{comment}', [\App\Http\Controllers\ProductCommentController::class, 'destroy'])->name('products.comments.destroy');
 });
 
+//rota pra editar produtos
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/products/{product}/edit', [AdminProductController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{product}', [AdminProductController::class, 'update'])->name('products.update');
+});
+
 //aprovar o recusar comentários
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/comments/{comment}/approve', [\App\Http\Controllers\ProductCommentController::class, 'approve'])->name('comments.approve');

@@ -177,4 +177,12 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('admin.products.index')->with('success', 'Produto removido com sucesso.');
     }
+    //controller pra exxibir detalhes do produto
+    public function show(Product $product)
+    {
+        return inertia('Admin/Products/Show', compact('product'));
+    }
+
+
+
 }

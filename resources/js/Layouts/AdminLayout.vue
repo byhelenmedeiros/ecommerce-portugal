@@ -28,6 +28,27 @@
     </Link>
   </div>
 </div>
+      <div class="relative" @mouseenter="open.categories = true" @mouseleave="open.categories = false">
+  <!-- Botão principal -->
+  <div class="flex items-center gap-3 px-3 py-2 rounded hover:bg-green-100 cursor-pointer">
+    <font-awesome-icon icon="fa-solid fa-tags" class="text-green-600" />
+    <span>Categorias</span>
+    <font-awesome-icon icon="fa-solid fa-chevron-down" class="ml-auto text-xs" />
+  </div>
+
+  <!-- Submenu -->
+  <div v-if="open.categories" class="absolute left-0 mt-1 bg-white shadow-lg border rounded w-48 z-10">
+    <Link :href="route('admin.categories.index')" class="flex items-center gap-2 px-4 py-2 hover:bg-green-50 text-sm">
+      <font-awesome-icon icon="fa-solid fa-list" class="text-green-500" />
+      Ver Categorias
+    </Link>
+    <Link :href="route('admin.categories.create')" class="flex items-center gap-2 px-4 py-2 hover:bg-green-50 text-sm">
+      <font-awesome-icon icon="fa-solid fa-plus" class="text-green-500" />
+      Nova Categoria
+    </Link>
+  </div>
+</div>
+
 
           <Link :href="route('admin.orders.index')" class="flex items-center gap-3 px-3 py-2 rounded hover:bg-green-100">
             <font-awesome-icon icon="fa-solid fa-file-invoice-dollar" class="text-green-600" />
@@ -54,5 +75,10 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
+
+const isOpenProdutos = ref(false);
+const isOpenCategorias = ref(false);
+
 </script>

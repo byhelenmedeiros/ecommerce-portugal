@@ -1,21 +1,26 @@
 <?php
 
+
 namespace App\Imports;
 
-use App\Models\Product;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Illuminate\Support\Str;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Illuminate\Support\Collection;
 
-class ProductsImport implements ToModel
+class ProductsImport implements ToCollection
 {
-    public function model(array $row)
+    public Collection $rows;
+
+    public function collection(Collection $collection)
     {
-        return new Product([
-            'name'        => $row[0],
-            'slug'        => Str::slug($row[0]),
-            'price'       => $row[1],
-            'stock'       => $row[2],
-            'category_id' => $row[3],
-        ]);
+        if ($collection->first() && $collection->first()->filter()->isNotEmpty()) {
+            $this->rows = $collection->slice(1)->values(); 
+        } else {
+            $this->rows = $collection;
+        }
+    }
+
+    public function getRows(): Collection
+    {
+        return $this->rows;
     }
 }

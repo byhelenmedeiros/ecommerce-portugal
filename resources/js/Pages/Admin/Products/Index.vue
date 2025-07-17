@@ -1,14 +1,18 @@
 <template>
   <AdminLayout>
     <Head title="Gestão de Produtos" />
-
+    <h1 class="text-base font-bold text-gray-700">Produtos</h1>
     <!-- Cabeçalho -->
-    <div class="flex justify-between items-center mb-4">
-      <h1 class="text-base font-bold text-gray-700">Produtos</h1>
+    <div class="flex justify-end items-right space-x-6 mb-4">
+      
       <Link :href="route('admin.products.create')"
         class="bg-green-700 text-white px-3 py-1.5 rounded hover:bg-green-800 text-xs">
         <font-awesome-icon icon="fa-solid fa-plus" class="mr-1" />
         Novo Produto
+      </Link>
+      <Link :href="route('admin.products.import')" class="bg-blue-700 text-white px-3 py-1.5 rounded hover:bg-blue-800 text-xs">
+        <font-awesome-icon icon="fa-solid fa-file-import" class="mr-1" />
+        Importar Produtos
       </Link>
     </div>
 

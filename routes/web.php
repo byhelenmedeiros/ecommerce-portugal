@@ -54,3 +54,4 @@ require __DIR__.'/modules/admin.php';
 require __DIR__.'/modules/shop.php';
 require __DIR__.'/modules/product.php';
 require __DIR__.'/modules/order.php';
+require __DIR__.'/modules/import.php';

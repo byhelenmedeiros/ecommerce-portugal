@@ -1,7 +1,9 @@
 <template>
   <AdminLayout title="Criar Produto">
     <h1 class="text-md font-bold mb-4 text-black ">Criar Novo Produto</h1>
+    
     <ProductForm :categories="categories" :regions="regions" />
+
   </AdminLayout>
 </template>
 

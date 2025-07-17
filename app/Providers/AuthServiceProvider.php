@@ -35,6 +35,7 @@ class AuthServiceProvider extends ServiceProvider
     OrderItem::class     => OrderItemPolicy::class,
     Inventory::class     => InventoryPolicy::class,
     ProductImage::class  => ProductImagePolicy::class,
+    
 ];
 
     /**

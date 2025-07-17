@@ -8,6 +8,8 @@ use App\Models\Category;
 use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ProductsImport;
 
 class ProductController extends Controller
 {
@@ -182,6 +184,14 @@ class ProductController extends Controller
     {
         return inertia('Admin/Products/Show', compact('product'));
     }
+
+    
+
+public function import(Request $request)
+{
+    Excel::import(new ProductsImport, $request->file('file'));
+    return back()->with('success', 'Importação concluída!');
+}
 
 
 

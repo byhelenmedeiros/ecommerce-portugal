@@ -11,10 +11,10 @@ class OrderPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
-    {
-        //
-    }
+   public function viewAny(User $user)
+{
+    return $user->hasRole('admin');
+}
 
     /**
      * Determine whether the user can view the model.
@@ -28,6 +28,8 @@ public function update(User $user, Order $order): bool
 {
     return $order->user_id === $user->id && $order->status === 'pending';
 }
+
+
     
 
     /**
@@ -35,7 +37,7 @@ public function update(User $user, Order $order): bool
      */
     public function delete(User $user, Order $order): bool
     {
-        //
+        return $user->hasRole('admin') || $order->user_id === $user->id;
     }
 
     /**
@@ -43,7 +45,7 @@ public function update(User $user, Order $order): bool
      */
     public function restore(User $user, Order $order): bool
     {
-        //
+        return $user->hasRole('admin');
     }
 
     /**
@@ -51,6 +53,6 @@ public function update(User $user, Order $order): bool
      */
     public function forceDelete(User $user, Order $order): bool
     {
-        //
+        return $user->hasRole('admin');
     }
 }

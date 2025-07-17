@@ -70,21 +70,25 @@
                     <InputError :message="form.errors.discount" />
                 </div>
                 <div>
-                    <InputLabel for="category_id" value="Categoria" />
-                    <select id="category_id" v-model="form.category_id" class="w-full h-8 text-xs border rounded">
-                        <option disabled value="">Seleciona...</option>
-                        <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
-                    </select>
-                    <InputError :message="form.errors.category_id" />
-                </div>
                 <div>
-                    <InputLabel for="region_id" value="Região" />
-                    <select id="region_id" v-model="form.region_id" class="w-full h-8 text-xs border rounded">
-                        <option disabled value="">Selecione</option>
-                        <option v-for="reg in regions" :key="reg.id" :value="reg.id">{{ reg.name }}</option>
-                    </select>
-                    <InputError :message="form.errors.region_id" />
-                </div>
+  <InputLabel for="category_id" value="Categoria" />
+  <select id="category_id" v-model="form.category_id" class="w-full h-8 text-xs border rounded">
+    <option disabled value="">Seleciona...</option>
+
+    <optgroup v-for="cat in groupedCategories" :key="cat.id" :label="cat.name">
+      <option :value="cat.id">{{ cat.name }}</option>
+      <option
+        v-for="sub in cat.children"
+        :key="sub.id"
+        :value="sub.id"
+      >
+        └─ {{ sub.name }}
+      </option>
+    </optgroup>
+  </select>
+  <InputError :message="form.errors.category_id" />
+</div>
+
             </div>
 
             <!-- Aba: Imagens -->
@@ -212,6 +216,7 @@
             </div>
 
         </div>
+</div>
         <!-- Botão -->
         <div class="text-end mt-4">
             <PrimaryButton class="bg-green-700 hover:bg-green-800 px-4 py-2 text-sm" :disabled="form.processing">
@@ -331,4 +336,16 @@ const submit = () => {
     });
 };
 
+import { computed } from 'vue';
+
+
+const groupedCategories = computed(() => {
+  const parents = props.categories.filter(c => c.parent_id === null);
+  const children = props.categories.filter(c => c.parent_id !== null);
+
+  return parents.map(parent => ({
+    ...parent,
+    children: children.filter(c => c.parent_id === parent.id)
+  }));
+});
 </script>

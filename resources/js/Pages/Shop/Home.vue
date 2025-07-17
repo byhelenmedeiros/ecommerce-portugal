@@ -5,7 +5,6 @@ import Category from '@/Components/Category.vue'
 import Bestselling from '@/Components/Bestselling.vue'
 import Cta_home from '@/Components/Cta_home.vue'
 import InfoBanner from '@/Components/InfoBanner.vue'
-import Footer from '@/Components/Footer.vue'
 </script>
 
 <template>
@@ -17,6 +16,5 @@ import Footer from '@/Components/Footer.vue'
     <Bestselling />
     <Cta_home />
  
-    <Footer />
   </GuestLayout>
 </template>

@@ -38,7 +38,7 @@
 
   <!-- Call-to-action com ícone -->
   <a
-    href="/shop"
+    href="/products"
     class="inline-flex items-center gap-2 px-6 py-3 bg-white text-green-700 font-semibold rounded-full shadow-lg hover:bg-red-600 hover:text-white transition duration-300"
   >
     <font-awesome-icon :icon="['fas', 'shopping-basket']" />

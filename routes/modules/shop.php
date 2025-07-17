@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Shop\OrderController;
 use App\Http\Controllers\Shop\WishlistController as ShopWishlistController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Shop\ProductController;
 
 // Rotas de administração (apenas para admin)
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -30,4 +31,12 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
+
+// Rotas públicas (sem autenticação)
+Route::get('/products', [\App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
+Route::get('/products/{product}', [\App\Http\Controllers\Admin\ProductController::class, 'show'])->name('products.show');
+
+//shop routes
+Route::get('/shop', [ProductController::class, 'index'])->name('shop.products.index');
+Route::get('/shop/{product}', [ProductController::class, 'show'])->name('shop.products.show');
 

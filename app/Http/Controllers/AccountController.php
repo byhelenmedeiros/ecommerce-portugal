@@ -11,7 +11,7 @@ class AccountController extends Controller
     public function index()
     {
         return Inertia::render('Account/Index', [
-            'user' => Auth::user()->load('customerProfile'),
+'user' => Auth::user()->load('fiscalAddress', 'entregaAddress'),
         ]);
     }
 

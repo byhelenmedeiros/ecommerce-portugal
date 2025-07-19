@@ -10,30 +10,35 @@ use App\Http\Controllers\Controller;
 
 class WishlistController extends Controller
 {
-    public function index()
-    {
-        $wishlist = Auth::user()->wishlist()->with('product')->get();
+   public function index(Request $request)
+{
+    $wishlist = Auth::user()->wishlist()->with('product')->get();
 
-        return Inertia::render('Account/Tabs/Wishlist', [
-            'wishlist' => $wishlist
-        ]);
+    if ($request->wantsJson()) {
+        return response()->json($wishlist);
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'product_id' => 'required|exists:products,id'
-        ]);
+    return Inertia::render('Account/Tabs/Wishlist', [
+        'wishlist' => $wishlist
+    ]);
+}
 
-        Auth::user()->wishlist()->syncWithoutDetaching([$request->product_id]);
+public function store(Request $request)
+{
+    $request->validate([
+        'product_id' => 'required|exists:products,id'
+    ]);
 
-        return back()->with('success', 'Desenho adicionado à wishlist.');
-    }
+    Auth::user()->wishlist()->syncWithoutDetaching([$request->product_id]);
 
-    public function destroy(Product $product)
-    {
-        Auth::user()->wishlist()->detach($product->id);
+    return response()->json(['success' => true]);
+}
 
-        return back()->with('success', 'Desenho removido da wishlist.');
-    }
+public function destroy(Product $product)
+{
+    Auth::user()->wishlist()->detach($product->id);
+
+    return response()->json(['success' => true]);
+}
+
 }

@@ -12,7 +12,7 @@ class WishlistController extends Controller
 {
    public function index(Request $request)
 {
-    $wishlist = Auth::user()->wishlist()->with('product')->get();
+$wishlist = Auth::user()->wishlist()->get();
 
     if ($request->wantsJson()) {
         return response()->json($wishlist);

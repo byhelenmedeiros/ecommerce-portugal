@@ -100,15 +100,7 @@ const syncLocalWishlist = async () => {
   localStorage.removeItem('wishlist')
   await wishlistStore.loadWishlist()
 }
-if (wishlistStore.user) {
-  syncLocalWishlist()
-} else {
-  watch(() => wishlistStore.user, (newUser) => {
-    if (newUser) {
-      syncLocalWishlist()
-    }
-  })
-}
+
 
 defineProps({ canResetPassword: Boolean });
 
@@ -122,9 +114,13 @@ const loginForm = useForm({
 
 const submitLogin = () => {
   loginForm.post(route('login'), {
+    onSuccess: async () => {
+      await syncLocalWishlist()
+    },
     onFinish: () => loginForm.reset('password'),
   });
-};
+}
+
 
 const tabClass = (tab) =>
   `px-4 py-2 mx-1 rounded-t-md font-semibold text-sm transition-all ${

@@ -10,6 +10,7 @@ use App\Http\Controllers\Shop\WishlistController as ShopWishlistController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Shop\ProductController;
 
+
 // Rotas de administração (apenas para admin)
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('products', AdminProductController::class);

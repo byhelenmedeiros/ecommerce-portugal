@@ -50,7 +50,7 @@
           <div class="w-px h-4 sm:h-5 bg-gray-300 opacity-50"></div>
 
           <!-- Login / Conta -->
-          <a :href="user ? '/minha-conta' : '/login'"
+          <a :href="user ? '/account' : '/login'"
             class="hover:text-green-600 transition hover:scale-105 sm:hover:scale-110 flex items-center gap-1">
             <font-awesome-icon :icon="['fas', 'user']" class="text-base sm:text-lg" />
             <span class="text-[10px] sm:text-[11px] text-gray-700 font-medium leading-snug whitespace-nowrap">

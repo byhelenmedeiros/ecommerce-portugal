@@ -24,6 +24,7 @@
         "@fortawesome/free-solid-svg-icons": "^6.7.2",
         "@fortawesome/vue-fontawesome": "^3.0.8",
         "@vueup/vue-quill": "^1.2.0",
+        "date-fns": "^4.1.0",
         "dayjs": "^1.11.13",
         "filepond": "^4.32.8",
         "filepond-plugin-file-validate-type": "^1.2.9",

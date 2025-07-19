@@ -60,7 +60,9 @@
 
         <div class="mt-4 flex justify-between gap-1">
          
-          <button class="btn btn-xs btn-success w-full text-md text-white rounded px-2 py-1  bg-green-600 hover:bg-green-700">
+          <button class="btn btn-xs btn-success w-full text-md text-white rounded px-2 py-1  bg-green-600 hover:bg-green-700"
+            @click="addToCart(product)"
+>
             <font-awesome-icon icon="fa-cart-plus" /> Adicionar ao carrinho
           </button>
           <button
@@ -147,6 +149,9 @@ import Pagination from '@/Shared/Pagination.vue'
 import { useWishlist } from '@/stores/cart'
 const { toggleWishlist, isInWishlist, wishlist } = useWishlist()
 const wishlistCount = wishlist.value.length
+import { useCart } from '@/stores/cart'
+const { addToCart } = useCart()
+
 
 const props = defineProps({
   products: Object,

@@ -40,3 +40,5 @@ Route::get('/products/{product}', [\App\Http\Controllers\Admin\ProductController
 Route::get('/shop', [ProductController::class, 'index'])->name('shop.products.index');
 Route::get('/shop/{product}', [ProductController::class, 'show'])->name('shop.products.show');
 
+Route::inertia('/cart', 'CartPage')->name('cart');
+

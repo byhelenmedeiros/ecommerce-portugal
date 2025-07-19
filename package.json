@@ -19,6 +19,7 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^6.7.2",
         "@fortawesome/free-brands-svg-icons": "^6.7.2",
         "@fortawesome/free-regular-svg-icons": "^6.7.2",
         "@fortawesome/free-solid-svg-icons": "^6.7.2",
@@ -32,6 +33,7 @@
         "filepond-plugin-image-preview": "^4.6.12",
         "intl-tel-input": "^25.3.1",
         "lodash.debounce": "^4.0.8",
+        "pinia": "^3.0.3",
         "vue-filepond": "^7.0.4",
         "vue-tel-input": "^9.3.0",
         "vuedraggable": "^4.1.0",

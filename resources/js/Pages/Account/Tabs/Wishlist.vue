@@ -48,11 +48,11 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { useWishlistStore } from '@/stores/useWishlistStore'
 
 const wishlistStore = useWishlistStore()
-const wishlist = wishlistStore.wishlist
+const wishlist = computed(() => wishlistStore.wishlist) 
 
 const addToCart = (item) => {
   alert(`Produto "${item.name}" adicionado ao carrinho.`)
@@ -65,5 +65,6 @@ const removeFromWishlist = async (id) => {
 // Carregar wishlist ao abrir
 onMounted(() => {
   wishlistStore.loadWishlist()
+    console.log('wishlist recebida:', wishlist.value)
 })
 </script>

@@ -68,6 +68,11 @@ class User extends Authenticatable
 {
     return $this->belongsToMany(Product::class, 'wishlists')->withTimestamps();
 }
+public function wishlist()
+{
+    return $this->belongsToMany(Product::class, 'wishlists');
+}
+
 
 public function addresses()
 {

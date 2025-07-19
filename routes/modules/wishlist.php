@@ -1,10 +1,7 @@
 <?php
 
 use App\Http\Controllers\Shop\WishlistController;
-use Illuminate\Routing\Route;
-
-Route::inertia('/wishlist', 'WishlistPage')->name('wishlist');
-
+use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index']);

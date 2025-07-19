@@ -38,13 +38,16 @@
           <!-- Carrinho -->
           <div class="relative flex items-center">
             <Link href="/cart" class="hover:text-green-600 transition hover:scale-105 sm:hover:scale-110">
-            <font-awesome-icon icon="fa-cart-shopping" class="text-base sm:text-lg" />
+    <font-awesome-icon :icon="['fas', 'shopping-cart']" class="text-4xl text-green-600" />
             </Link>
+
+            <!-- Badge de contador -->
             <span v-if="cartCount > 0"
-              class="absolute -top-1 -right-2 bg-green-600 text-white text-[10px] sm:text-xs font-bold rounded-full px-1 py-0.5 shadow">
+              class="absolute -top-1 -right-2 w-5 h-5 bg-green-600 text-white text-[10px] sm:text-xs font-bold rounded-full flex items-center justify-center shadow">
               {{ cartCount }}
             </span>
           </div>
+
 
           <!-- Divisor -->
           <div class="w-px h-4 sm:h-5 bg-gray-300 opacity-50"></div>
@@ -101,7 +104,7 @@ import { usePage } from '@inertiajs/vue3'
 import { computed, ref, onMounted } from 'vue'
 import { useCart } from '@/stores/cart'
 const { cart } = useCart()
-const cartCount = computed(() => cart.value.reduce((sum, p) => sum + p.quantity, 0))
+const cartCount = computed(() => (Array.isArray(cart.value) ? cart.value.reduce((sum, p) => sum + p.quantity, 0) : 0))
 
 
 // Usuário logado

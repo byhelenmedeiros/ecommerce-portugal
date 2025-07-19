@@ -10,18 +10,30 @@ use App\Http\Controllers\Controller;
 
 class WishlistController extends Controller
 {
-   public function index(Request $request)
+public function index(Request $request)
 {
-$wishlist = Auth::user()->wishlist()->get();
+    $wishlist = Auth::user()->wishlist()->with('images')->get();
 
-    if ($request->wantsJson()) {
-        return response()->json($wishlist);
-    }
-
-    return Inertia::render('Account/Tabs/Wishlist', [
-        'wishlist' => $wishlist
+    return response()->json([
+        'ok' => true,
+        'data' => $wishlist
     ]);
 }
+
+
+/**
+ * Get the image URL for a product.
+ *
+ * @param  \App\Models\Product  $product
+ * @return string
+ */
+public function getImageUrl(Product $product)
+{
+    return $product->featuredImage
+        ? asset('storage/' . $product->featuredImage->path)
+        : 'https://via.placeholder.com/400x300?text=Sem+Imagem';
+}
+
 
 public function store(Request $request)
 {

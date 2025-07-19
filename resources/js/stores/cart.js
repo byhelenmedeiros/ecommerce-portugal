@@ -1,53 +1,55 @@
-import { ref, watch } from 'vue'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-const wishlist = ref([])
-const cart = ref([])
+export const useCart = defineStore('cart', () => {
+  const cart = ref([])
 
-if (localStorage.getItem('wishlist')) {
-  wishlist.value = JSON.parse(localStorage.getItem('wishlist'))
-}
-if (localStorage.getItem('cart')) {
-  cart.value = JSON.parse(localStorage.getItem('cart'))
-}
+  function addToCart(product, quantity = 1) {
+    const existing = cart.value.find(item => item.id === product.id)
 
-watch(wishlist, () => {
-  localStorage.setItem('wishlist', JSON.stringify(wishlist.value))
-}, { deep: true })
-
-watch(cart, () => {
-  localStorage.setItem('cart', JSON.stringify(cart.value))
-}, { deep: true })
-
-export function useWishlist() {
-  function toggleWishlist(product) {
-    const index = wishlist.value.findIndex(p => p.id === product.id)
-    if (index > -1) {
-      wishlist.value.splice(index, 1)
+    if (existing) {
+      existing.quantity += quantity
     } else {
-      wishlist.value.push(product)
+      cart.value.push({ ...product, quantity })
     }
-  }
 
-  function isInWishlist(productId) {
-    return wishlist.value.some(p => p.id === productId)
-  }
-
-  return { wishlist, toggleWishlist, isInWishlist }
-}
-
-export function useCart() {
-  function addToCart(product) {
-    const exists = cart.value.find(p => p.id === product.id)
-    if (!exists) {
-      cart.value.push({ ...product, quantity: 1 })
-    } else {
-      exists.quantity += 1
-    }
+     localStorage.setItem('cart', JSON.stringify(cart.value))
   }
 
   function removeFromCart(productId) {
-    cart.value = cart.value.filter(p => p.id !== productId)
+    cart.value = cart.value.filter(item => item.id !== productId)
+    localStorage.setItem('cart', JSON.stringify(cart.value))
   }
 
-  return { cart, addToCart, removeFromCart }
-}
+  function getQuantity(productId) {
+    const item = cart.value.find(p => p.id === productId)
+    return item ? item.quantity : 1
+  }
+
+  function increaseQty(productId) {
+    const item = cart.value.find(p => p.id === productId)
+    if (item) item.quantity++
+  }
+
+  function decreaseQty(productId) {
+    const item = cart.value.find(p => p.id === productId)
+    if (item && item.quantity > 1) item.quantity--
+  }
+
+  function loadCartFromStorage() {
+    const stored = localStorage.getItem('cart')
+    if (stored) {
+      cart.value = JSON.parse(stored)
+    }
+  }
+
+  return {
+    cart,
+    addToCart,
+    removeFromCart,
+    getQuantity,
+    increaseQty,
+    decreaseQty,
+    loadCartFromStorage,
+  }
+})

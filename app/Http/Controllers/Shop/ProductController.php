@@ -7,35 +7,63 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Inertia\Inertia;
 use App\Models\Category;
-use App\Models\Region;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
-   public function index(Request $request)
+  public function index(Request $request)
 {
-    $query = Product::with('category')
-        ->when($request->name, fn($q) => $q->where('name', 'like', '%' . $request->name . '%'))
-        ->when($request->category, fn($q) => $q->where('category_id', $request->category))
-     //   ->when($request->region, fn($q) => $q->where('region_id', $request->region))
-        ->when($request->min_price, fn($q) => $q->where('price', '>=', $request->min_price))
-        ->when($request->max_price, fn($q) => $q->where('price', '<=', $request->max_price))
-        ->when($request->sort, function ($q) use ($request) {
-            return match ($request->sort) {
-                'price_asc'  => $q->orderBy('price', 'asc'),
-                'price_desc' => $q->orderBy('price', 'desc'),
-                'name_asc'   => $q->orderBy('name', 'asc'),
-                'name_desc'  => $q->orderBy('name', 'desc'),
-                default      => $q->orderBy('created_at', 'desc'),
-            };
-        });
+    $query = Product::query()->with('category');
+
+    if ($request->filled('name')) {
+        $query->where('name', 'like', '%' . $request->name . '%');
+    }
+
+    if ($request->filled('category')) {
+        $query->where('category_id', $request->category);
+    }
+
+    if ($request->filled('min_price')) {
+        $query->where('final_price', '>=', $request->min_price);
+    }
+
+    if ($request->filled('max_price')) {
+        $query->where('final_price', '<=', $request->max_price);
+    }
+
+    if ($request->boolean('in_stock') && !$request->boolean('out_of_stock')) {
+        $query->where('stock', '>', 0);
+    }
+
+    if ($request->boolean('out_of_stock') && !$request->boolean('in_stock')) {
+        $query->where('stock', '<=', 0);
+    }
+
+    if ($request->filled('sort')) {
+        match ($request->sort) {
+            'price_asc' => $query->orderBy('final_price', 'asc'),
+            'price_desc' => $query->orderBy('final_price', 'desc'),
+            'name_asc' => $query->orderBy('name', 'asc'),
+            'name_desc' => $query->orderBy('name', 'desc'),
+            default => null,
+        };
+    }
+
+    $products = $query->paginate(12);
+    $categories = Category::orderBy('name')->get();
 
     return Inertia::render('Shop/Products/ShopIndex', [
-        'products' => $query->paginate(12)->appends(request()->query()),
-        'filters' => $request->only(['name', 'category',  'min_price', 'max_price', 'sort']),
-        'categories' => Category::all(['id', 'name']),
-       
+        'products' => $products,
+        'categories' => $categories,
+        'filters' => $request->only([
+            'name', 'category', 'min_price', 'max_price', 'sort', 'in_stock', 'out_of_stock'
+        ]),
+         'auth' => [
+        'user' => Auth::user(),
+    ]
     ]);
 }
+
 
 
     public function show(Product $product)

@@ -18,6 +18,13 @@ class AccountController extends Controller
         'created_at' => Auth::user()->created_at,
         'fiscalAddress' => Auth::user()->fiscalAddress,
         'entregaAddress' => Auth::user()->entregaAddress,
+        'phone' => Auth::user()->phone,
+        'birth_date' => Auth::user()->birth_date,
+        'billing_name' => Auth::user()->billing_name,
+        'nif' => Auth::user()->nif,
+        'nif_on_invoice' => Auth::user()->nif_on_invoice,
+        'orders' => Auth::user()->orders,
+        'wishlist' => Auth::user()->wishlist,
     ],
 
 ]);
@@ -29,6 +36,11 @@ class AccountController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . auth()->id(),
+            'phone' => 'nullable|string|max:20',
+            'birth_date' => 'nullable|date',
+            'billing_name' => 'nullable|string|max:255',
+            'nif' => 'nullable|string|max:9',
+            'nif_on_invoice' => 'nullable|boolean',
         ]);
 
         auth()->user()->update($request->only('name', 'email'));

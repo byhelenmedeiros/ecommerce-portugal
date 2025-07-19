@@ -23,6 +23,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'birth_date',
+        'billing_name',
+        'nif',
+        'nif_on_invoice',
+        
     ];
 
     /**

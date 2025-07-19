@@ -33,6 +33,8 @@ Route::middleware(['auth'])->prefix('account')->name('account.')->group(function
 
 // Mostrar a view com ambas moradas (fiscal + entrega)
 Route::get('/address/account', [AddressController::class, 'show'])->name('address.account');
+Route::patch('/account', [AccountController::class, 'update'])->name('account.update');
+
 
 
 // Atualizar morada fiscal

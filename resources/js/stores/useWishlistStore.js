@@ -20,6 +20,21 @@ export const useWishlistStore = defineStore('wishlist', () => {
       wishlist.value = local ? JSON.parse(local) : []
     }
   }
+  const wishlistStore = useWishlistStore()
+
+const syncLocalWishlist = async () => {
+  const local = JSON.parse(localStorage.getItem('wishlist') || '[]')
+  for (const item of local) {
+    try {
+      await axios.post('/api/wishlist', { product_id: item.id })
+    } catch (e) {
+      console.error('Erro ao sincronizar wishlist', e)
+    }
+  }
+  localStorage.removeItem('wishlist')
+  await wishlistStore.loadWishlist()
+}
+
 
   // Guardar localmente
   watch(wishlist, (val) => {

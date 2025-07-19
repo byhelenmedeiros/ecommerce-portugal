@@ -84,6 +84,31 @@ import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import Register from './Register.vue';
+import { useWishlistStore } from '@/stores/useWishlistStore'
+
+const wishlistStore = useWishlistStore()
+
+const syncLocalWishlist = async () => {
+  const local = JSON.parse(localStorage.getItem('wishlist') || '[]')
+  for (const item of local) {
+    try {
+      await axios.post('/api/wishlist', { product_id: item.id })
+    } catch (e) {
+      console.error('Erro ao sincronizar wishlist', e)
+    }
+  }
+  localStorage.removeItem('wishlist')
+  await wishlistStore.loadWishlist()
+}
+if (wishlistStore.user) {
+  syncLocalWishlist()
+} else {
+  watch(() => wishlistStore.user, (newUser) => {
+    if (newUser) {
+      syncLocalWishlist()
+    }
+  })
+}
 
 defineProps({ canResetPassword: Boolean });
 

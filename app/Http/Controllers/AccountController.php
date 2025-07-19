@@ -19,6 +19,7 @@ class AccountController extends Controller
         'fiscalAddress' => Auth::user()->fiscalAddress,
         'entregaAddress' => Auth::user()->entregaAddress,
         'phone' => Auth::user()->phone,
+        'phone_alt' => Auth::user()->phone_alt,
         'birth_date' => Auth::user()->birth_date,
         'billing_name' => Auth::user()->billing_name,
         'nif' => Auth::user()->nif,
@@ -31,22 +32,33 @@ class AccountController extends Controller
 
     }
 
-    public function update(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . auth()->id(),
-            'phone' => 'nullable|string|max:20',
-            'birth_date' => 'nullable|date',
-            'billing_name' => 'nullable|string|max:255',
-            'nif' => 'nullable|string|max:9',
-            'nif_on_invoice' => 'nullable|boolean',
-        ]);
+ public function update(Request $request)
+{
+    $request->validate([
+        'name'            => 'required|string|max:255',
+        'email'           => 'required|email|max:255|unique:users,email,' . auth()->id(),
+        'phone'           => 'nullable|string|max:20',
+        'phone_alt'       => 'nullable|string|max:20',
+        'birth_date'      => 'nullable|date',
+        'billing_name'    => 'nullable|string|max:255',
+        'nif'             => 'nullable|string|max:9',
+        'nif_on_invoice'  => 'nullable|boolean',
+    ]);
 
-        auth()->user()->update($request->only('name', 'email'));
+    auth()->user()->update($request->only([
+        'name',
+        'email',
+        'phone',
+        'phone_alt',
+        'birth_date',
+        'billing_name',
+        'nif',
+        'nif_on_invoice',
+    ]));
 
-        return redirect()->back()->with('success', 'Dados atualizados com sucesso.');
-    }
+    return redirect()->back()->with('success', 'Dados atualizados com sucesso.');
+}
+
 
     public function destroy()
     {

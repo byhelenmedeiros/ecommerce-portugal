@@ -12,8 +12,8 @@
     </div>
 
     <!-- Modo de Visualização -->
-    <div v-if="!editing" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-      <div v-for="field in displayFields" :key="field.key" class="group bg-white rounded shadow-sm p-4 hover:shadow-md transition">
+    <div v-if="!editing" class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+      <div v-for="field in displayFields" :key="field.key" class="group bg-white rounded shadow-sm p-2 hover:shadow-md transition">
         <p class="text-xs text-gray-400 mb-1">{{ field.label }}</p>
         <p class="font-medium group-hover:text-green-700">
           {{ formatField(field.key) }}

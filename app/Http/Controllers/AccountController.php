@@ -10,9 +10,18 @@ class AccountController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Account/Index', [
-'user' => Auth::user()->load('fiscalAddress', 'entregaAddress'),
-        ]);
+      return Inertia::render('Account/Index', [
+    'user' => [
+        'id' => Auth::id(),
+        'name' => Auth::user()->name,
+        'email' => Auth::user()->email,
+        'created_at' => Auth::user()->created_at,
+        'fiscalAddress' => Auth::user()->fiscalAddress,
+        'entregaAddress' => Auth::user()->entregaAddress,
+    ],
+
+]);
+
     }
 
     public function update(Request $request)

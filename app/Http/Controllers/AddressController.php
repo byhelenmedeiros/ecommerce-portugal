@@ -9,14 +9,29 @@ use Inertia\Inertia;
 
 class AddressController extends Controller
 {
+
+public function show()
+{
+    $user = Auth::user();
+
+   return Inertia::render('Account/Tabs/Morada', [
+    'fiscal' => $user->addresses()->where('type', 'fiscal')->first() ?? (object) [],
+    'entrega' => $user->addresses()->where('type', 'entrega')->first() ?? (object) [],
+]);
+
+
+
+}
+
+
     public function edit()
     {
         $user = Auth::user();
 
-        return Inertia::render('Account/Tabs/Morada', [
-            'fiscal' => $user->fiscalAddress,
-            'entrega' => $user->entregaAddress,
-        ]);
+       return Inertia::render('Account/Tabs/Morada', [
+    'fiscal' => Auth::user()->fiscalAddress, 
+    'entrega' => Auth::user()->entregaAddress,
+       ]);
     }
 
     public function updateFiscal(Request $request)
@@ -36,6 +51,11 @@ class AddressController extends Controller
             'city' => 'nullable|string|max:100',
             'postal_code' => 'nullable|string|max:20',
             'country' => 'nullable|string|max:100',
+            'door' => 'nullable|string|max:50',
+            'floor' => 'nullable|string|max:50',
+            'location' => 'nullable|string|max:100',
+            'district' => 'nullable|string|max:100',
+            
         ]);
 
         $user = Auth::user();
@@ -50,4 +70,33 @@ class AddressController extends Controller
 
         return redirect()->back()->with('success', 'Morada ' . $type . ' atualizada com sucesso.');
     }
+   public function destroyEntrega()
+{
+    $user = Auth::user();
+    $address = $user->addresses()->where('type', 'entrega')->first();
+    if (!$address) {
+        return redirect()->back()->with('error', 'Morada de entrega não encontrada.');
+    }
+
+    if ($address) {
+        $address->delete();
+    }
+
+    return redirect()->back()->with('success', 'Morada de entrega removida com sucesso.');
+}
+    public function destroyFiscal()
+    {
+     $user = Auth::user();
+     $address = $user->addresses()->where('type', 'fiscal')->first();
+     if (!$address) {
+          return redirect()->back()->with('error', 'Morada fiscal não encontrada.');
+     }
+    
+     if ($address) {
+          $address->delete();
+     }
+    
+     return redirect()->back()->with('success', 'Morada fiscal removida com sucesso.');
+    }
+
 }

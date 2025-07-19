@@ -32,12 +32,16 @@ const activeTab = ref('dados')
           <div :key="activeTab" class="bg-white p-6 rounded shadow">
             <DadosPessoais v-if="activeTab === 'dados'" :user="user" />
             <MeusPedidos v-else-if="activeTab === 'pedidos'" />
-            <Morada v-else-if="activeTab === 'morada'" :profile="user.customer_profile" />
+<Morada
+  v-else-if="activeTab === 'morada'"
+  :fiscal="user.fiscalAddress"
+  :entrega="user.entregaAddress"
+/>
             <Wishlist v-else-if="activeTab === 'Wishlist'" />
           </div>
         </transition>
       </section>
-    </main>
+    </main> 
 
     <Footer />
   </div>

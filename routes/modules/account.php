@@ -25,17 +25,27 @@ Route::middleware(['auth'])->prefix('account')->name('account.')->group(function
     // Pedidos
     Route::get('/orders', [ShopOrderController::class, 'index'])->name('orders');
 
-// Morada
-Route::get('/address', [AddressController::class, 'index'])->name('address');
-Route::post('/address', [AddressController::class, 'store'])->name('address.store');
-Route::patch('/address/{address}', [AddressController::class, 'update'])->name('address.update');
-Route::delete('/address/{address}', [AddressController::class, 'destroy'])->name('address.destroy');
+    // Moradas gerais (admin ou lista do utilizador)
+    Route::get('/morada', [AddressController::class, 'show'])->name('addresses');
+    Route::get('/address', [AddressController::class, 'index'])->name('address');
+    Route::post('/address', [AddressController::class, 'store'])->name('address.store');
+    Route::patch('/address/{address}', [AddressController::class, 'update'])->name('address.update');
+
+// Mostrar a view com ambas moradas (fiscal + entrega)
+Route::get('/address/account', [AddressController::class, 'show'])->name('address.account');
+
+
+// Atualizar morada fiscal
+Route::patch('/address/account/fiscal', [AddressController::class, 'updateFiscal'])->name('address.account.fiscal');
+Route::delete('/address/account/fiscal', [AddressController::class, 'destroyFiscal'])->name('account.address.account.fiscal.destroy');
+
+// Atualizar morada de entrega
+Route::patch('/address/account/entrega', [AddressController::class, 'updateEntrega'])->name('address.account.entrega');
+Route::delete('/address/account/entrega', [AddressController::class, 'destroyEntrega'])->name('account.address.account.entrega.destroy');
 
 
     // Wishlist
-   Route::middleware(['auth'])->prefix('account')->name('account.')->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
     Route::post('/wishlist', [WishlistController::class, 'store'])->name('wishlist.store');
     Route::delete('/wishlist/{product}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
-});
 });

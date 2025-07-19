@@ -1,69 +1,56 @@
-<template>
-  <div class="min-h-screen bg-gray-100">
-    <!-- Header -->
-    <Header />
+<script setup>
+import { ref } from 'vue'
+import SidebarLink from '@/Components/SidebarLink.vue'
+import Navbar from '@/Components/Navbar.vue'
+import Footer from '@/Components/Footer.vue'
 
-    <main class="max-w-7xl mx-auto py-10 px-4 lg:flex lg:space-x-6">
-      <!-- Sidebar -->
+import DadosPessoais from './Tabs/DadosPessoais.vue'
+import MeusPedidos from './Tabs/MeusPedidos.vue'
+import Morada from './Tabs/Morada.vue'
+import Wishlist from './Tabs/Wishlist.vue'
+
+const props = defineProps({ user: Object })
+const activeTab = ref('dados')
+</script>
+
+<template>
+  <div class="min-h-screen bg-gray-100 flex flex-col">
+    <Navbar />
+
+    <main class="max-w-7xl w-full mx-auto py-10 px-4 lg:flex lg:space-x-6 flex-1">
       <aside class="w-full lg:w-1/4 bg-white rounded shadow-sm mb-6 lg:mb-0">
         <nav class="p-4 space-y-2 text-sm font-medium text-gray-700">
-          <SidebarLink icon="user" label="Dados Pessoais" :active="true" />
-          <SidebarLink icon="box" label="Meus Pedidos" />
-          <SidebarLink icon="location-dot" label="Endereço" />
-          <SidebarLink icon="heart" label="Favoritos" />
-          <SidebarLink icon="power-off" label="Terminar Sessão" :href="route('logout')" method="post" />
-        </nav>
+          <SidebarLink icon="user" label="Dados Pessoais" :active="activeTab === 'dados'" @select="activeTab = 'dados'" />
+          <SidebarLink icon="box" label="Meus Pedidos" :active="activeTab === 'pedidos'" @select="activeTab = 'pedidos'" />
+          <SidebarLink icon="location-dot" label="Morada" :active="activeTab === 'morada'" @select="activeTab = 'morada'" />
+          <SidebarLink icon="heart" label="Wishlist" :active="activeTab === 'Wishlist'" @select="activeTab = 'Wishlist'" />
+        </nav>  
       </aside>
 
-      <!-- Conteúdo Principal -->
       <section class="flex-1 space-y-6">
-        <div class="bg-white p-6 rounded shadow">
-          <h1 class="text-2xl font-bold text-gray-800 mb-4">Minha Conta</h1>
-
-          <!-- Dados do usuário -->
-          <div class="space-y-2">
-            <p><strong>Nome:</strong> {{ user.name }}</p>
-            <p><strong>Email:</strong> {{ user.email }}</p>
-            <p><strong>Registado em:</strong> {{ formatDate(user.created_at) }}</p>
+        <transition name="fade-slide" mode="out-in">
+          <div :key="activeTab" class="bg-white p-6 rounded shadow">
+            <DadosPessoais v-if="activeTab === 'dados'" :user="user" />
+            <MeusPedidos v-else-if="activeTab === 'pedidos'" />
+            <Morada v-else-if="activeTab === 'morada'" :profile="user.customer_profile" />
+            <Wishlist v-else-if="activeTab === 'Wishlist'" />
           </div>
-        </div>
-
-        <!-- Se houver perfil -->
-        <div v-if="user.customer_profile" class="bg-white p-6 rounded shadow">
-          <h2 class="text-lg font-semibold mb-2">Informações do Perfil</h2>
-          <div class="space-y-2">
-            <p><strong>Telefone:</strong> {{ user.customer_profile.phone }}</p>
-            <p><strong>Morada:</strong> {{ user.customer_profile.address }}</p>
-            <p><strong>Cidade:</strong> {{ user.customer_profile.city }}</p>
-            <p><strong>Código Postal:</strong> {{ user.customer_profile.postal_code }}</p>
-            <p><strong>País:</strong> {{ user.customer_profile.country }}</p>
-          </div>
-        </div>
-
-        <div class="flex justify-end">
-          <Link :href="route('profile.edit')" class="btn-primary">Editar Perfil</Link>
-        </div>
+        </transition>
       </section>
     </main>
 
-    <!-- Footer -->
     <Footer />
   </div>
 </template>
 
-<script setup>
-import { Link, useForm } from '@inertiajs/vue3'
-import { format } from 'date-fns'
-import { pt } from 'date-fns/locale'
-
-// Componentes globais
-import Header from '@/Components/Layout/Header.vue'
-import Footer from '@/Components/Layout/Footer.vue'
-import SidebarLink from '@/Components/SidebarLink.vue'
-
-const props = defineProps({
-  user: Object,
-})
-
-const formatDate = (date) => format(new Date(date), "dd 'de' MMMM 'de' yyyy", { locale: pt })
-</script>
+<style scoped>
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.3s ease;
+}
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+</style>

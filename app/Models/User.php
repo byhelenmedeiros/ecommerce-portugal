@@ -54,13 +54,25 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
-    public function wishlists()
+   public function wishlists()
 {
-    return $this->hasMany(Wishlist::class);
+    return $this->belongsToMany(Product::class, 'wishlists')->withTimestamps();
 }
-public function customerProfile()
+
+public function addresses()
 {
-    return $this->hasOne(\App\Models\CustomerProfile::class);
+    return $this->hasMany(Address::class);
 }
+
+public function fiscalAddress()
+{
+    return $this->hasOne(Address::class)->where('type', 'fiscal');
+}
+
+public function entregaAddress()
+{
+    return $this->hasOne(Address::class)->where('type', 'entrega');
+}
+
 
 }

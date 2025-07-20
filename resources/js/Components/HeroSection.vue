@@ -1,5 +1,5 @@
 <template>
-<section class="relative overflow-visible bg-cover bg-center h-[70vh] pb-[100px]" style="background-image: url('/images/bg-hero.jpg')">
+<section class="relative  overflow-visible bg-cover bg-center h-[70vh]  pb-[100px]" style="background-image: url('/images/bg-hero.jpg')">
     <!-- Overlay com degradê animado -->
     <div class="absolute inset-0 bg-gradient-to-br from-green-800/80 to-red-800/80 backdrop-blur-sm z-0 animate-pulse-slow"></div>
 

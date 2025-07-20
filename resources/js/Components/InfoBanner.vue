@@ -1,6 +1,6 @@
 <template>
-  <section class="bg-red-400 py-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section class="bg-red-400  py-10">
+    <div class=" mx-auto px-4 sm:px-6 lg:px-8">
 
       <!-- Título -->
       <h2 class="text-center text-white text-2xl sm:text-3xl font-extrabold mb-8 animate-fade-in">

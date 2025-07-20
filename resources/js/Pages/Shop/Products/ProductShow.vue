@@ -1,5 +1,5 @@
 <template>
-  <section class="max-w-6xl mx-auto py-8 px-4">
+  <section class="max-w-7xl mx-auto py-8 px-4">
     <div class="grid md:grid-cols-2 gap-8">
       <!-- Imagem -->
       <div>

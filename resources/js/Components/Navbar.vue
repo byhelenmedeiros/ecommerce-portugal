@@ -1,9 +1,8 @@
 <template>
   <div class="bg-white">
-    <!-- Barra principal -->
-    <nav class="mx-auto px-4 sm:px-6 lg:px-8 py-2">
+    <!-- Nav principal -->
+    <nav class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-2">
       <div class="flex justify-between items-center h-16">
-        <!-- Logo + Tagline -->
         <div>
           <a href="/" class="flex flex-col leading-none">
             <div class="text-3xl font-extrabold text-red-600 tracking-tight">AlmaMinhota</div>
@@ -11,136 +10,133 @@
           </a>
         </div>
 
-        <!-- Menu principal -->
         <div class="hidden md:flex items-center space-x-6">
-          <a v-for="cat in menuCategories" :key="cat.id" :href="`/shop?cat=${cat.slug}`"
-            class="text-gray-800 hover:text-green-600 transition hover:scale-105 duration-200">
+          <a
+            v-for="cat in menuCategories"
+            :key="cat.id"
+            :href="`/shop?cat=${cat.slug}`"
+            class="text-gray-800 hover:text-red-600 hover:underline underline-offset-4 transition duration-200 uppercase font-bold text-xs tracking-wide"
+          >
             {{ cat.name }}
           </a>
         </div>
 
-        <!-- Ações rápidas com ícones -->
-        <div class="flex items-center space-x-2 sm:space-x-3 md:space-x-4 ml-2 sm:ml-3 md:ml-4 text-gray-600">
+        <div class="flex items-center gap-6 text-gray-700 text-sm">
           <!-- Wishlist -->
-          <div class="relative flex items-center">
-            <a href="/wishlist" class="hover:text-green-600 transition hover:scale-105 sm:hover:scale-110">
-              <font-awesome-icon :icon="['fas', 'heart']" class="text-base sm:text-lg" />
+          <div class="relative group">
+            <a
+              :href="user ? '/wishlist' : '/login'"
+              class="relative flex flex-col items-center justify-center hover:text-pink-600 transition-transform duration-200 transform hover:scale-110"
+            >
+              <FontAwesomeIcon :icon="['fas', 'heart']" class="text-2xl sm:text-2xl drop-shadow-sm" />
+              <span class="text-[10px] sm:text-xs mt-1 font-medium">
+                {{ user ? 'Wishlist' : 'Login' }}
+              </span>
+              <span
+                v-if="user && wishlistCount > 0"
+                class="absolute -top-2 -right-2 w-5 h-5 bg-pink-600 text-white text-[10px] sm:text-xs font-bold rounded-full flex items-center justify-center shadow-md"
+              >
+                {{ wishlistCount }}
+              </span>
             </a>
-            <span v-if="wishlistCount > 0"
-              class="absolute -top-1 -right-2 bg-red-600 text-white text-[10px] sm:text-xs font-bold rounded-full px-1 py-0.5 shadow">
-              {{ wishlistCount }}
-            </span>
           </div>
-
-          <!-- Divisor -->
-          <div class="w-px h-4 sm:h-5 bg-gray-300 opacity-50"></div>
 
           <!-- Carrinho -->
-          <div class="relative flex items-center">
-            <Link href="/cart" class="hover:text-green-600 transition hover:scale-105 sm:hover:scale-110">
-    <font-awesome-icon :icon="['fas', 'shopping-cart']" class="text-4xl text-green-600" />
+          <div class="relative group">
+            <Link
+              :href="user ? '/cart' : '/login'"
+              class="relative flex flex-col items-center justify-center hover:text-green-600 transition-transform duration-200 transform hover:scale-110"
+            >
+              <FontAwesomeIcon :icon="['fas', 'shopping-cart']" class="text-2xl sm:text-2xl drop-shadow-sm" />
+              <span class="text-[10px] sm:text-xs mt-1 font-medium">
+                {{ user ? 'Carrinho' : 'Login' }}
+              </span>
+              <span
+                v-if="user && cartCount > 0"
+                class="absolute -top-2 -right-2 w-5 h-5 bg-green-600 text-white text-[10px] sm:text-xs font-bold rounded-full flex items-center justify-center shadow-md"
+              >
+                {{ cartCount }}
+              </span>
             </Link>
-
-            <!-- Badge de contador -->
-            <span v-if="cartCount > 0"
-              class="absolute -top-1 -right-2 w-5 h-5 bg-green-600 text-white text-[10px] sm:text-xs font-bold rounded-full flex items-center justify-center shadow">
-              {{ cartCount }}
-            </span>
           </div>
 
-
-          <!-- Divisor -->
-          <div class="w-px h-4 sm:h-5 bg-gray-300 opacity-50"></div>
-
-          <!-- Login / Conta -->
-          <a :href="user ? '/account' : '/login'"
-            class="hover:text-green-600 transition hover:scale-105 sm:hover:scale-110 flex items-center gap-1">
-            <font-awesome-icon :icon="['fas', 'user']" class="text-base sm:text-lg" />
-            <span class="text-[10px] sm:text-[11px] text-gray-700 font-medium leading-snug whitespace-nowrap">
-              {{ user ? 'Minha conta' : 'Entrar / Registar' }}
-            </span>
-          </a>
+          <!-- Conta -->
+          <div class="relative group">
+            <a
+              :href="user ? '/account' : '/login'"
+              class="relative flex flex-col items-center justify-center hover:text-blue-600 transition-transform duration-200 transform hover:scale-110"
+            >
+              <FontAwesomeIcon :icon="['fas', 'user']" class="text-2xl sm:text-2xl drop-shadow-sm" />
+              <span class="text-[10px] sm:text-xs mt-1 font-medium">
+                {{ user ? 'Conta' : 'Login' }}
+              </span>
+            </a>
+          </div>
         </div>
-
       </div>
     </nav>
 
-    <!-- Barra de categorias + pesquisa -->
-    <div class="bg-green-600 text-white w-full relative">
-      <div class="mx-auto px-4 sm:px-6 lg:px-8 py-2">
-        <!-- Wrapper principal flexível -->
+    <!-- Subcategorias + pesquisa -->
+    <div class="w-full border-t border-b border-gray-200 bg-white">
+      <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-1">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-          <!-- Menu de categorias com fade lateral no mobile -->
           <div class="relative md:flex-1">
-            <!-- Fade lateral direita (só no mobile) -->
-            <div
-              class="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-green-600 to-transparent z-10 pointer-events-none md:hidden">
-            </div>
+            <div class="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none md:hidden"></div>
 
-            <!-- Lista de categorias com scroll horizontal no mobile -->
-            <div
-              class="flex overflow-x-auto gap-2 py-2 text-sm font-semibold uppercase tracking-wide whitespace-nowrap scroll-smooth">
-              <a v-for="cat in categorias" :key="cat.slug" :href="`/shop?cat=${cat.slug}`"
-                class="px-4 py-2 bg-green-700 hover:bg-red-600 rounded-md shadow-sm transition duration-200">
-                {{ cat.nome }}
+            <div class="flex overflow-x-auto gap-1.5 sm:gap-2 py-1 text-[11px] sm:text-xs font-bold tracking-wide uppercase whitespace-nowrap scroll-smooth no-scrollbar">
+              <a
+                v-for="sub in subcategories.slice(0, 7)"
+                :key="sub.slug"
+                :href="`/shop?cat=${sub.slug}`"
+                class="px-2 py-1.5 sm:px-3 sm:py-1.5 text-gray-700 hover:text-red-600 hover:underline underline-offset-4 rounded transition-all duration-200 hover:scale-[1.02] active:scale-[0.96]"
+              >
+                {{ sub.name }}
               </a>
             </div>
           </div>
 
-          <!-- Barra de pesquisa centralizada no mobile, alinhada à direita no desktop -->
           <div class="w-full md:w-auto md:flex-shrink-0">
             <SearchBar class="w-full md:w-[320px] lg:w-[400px]" />
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
 
+
 <script setup>
 import SearchBar from '@/Components/SearchBar.vue'
-import { usePage } from '@inertiajs/vue3'
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref } from 'vue'
 import { useCart } from '@/stores/cart'
+import { usePage } from '@inertiajs/vue3'
+
+const page = usePage()
+const subcategories = page.props.subcategories ?? []
+const menuCategories = page.props.menuCategories ?? []
+const user = page.props.auth?.user ?? null
+
 const { cart } = useCart()
-const cartCount = computed(() => (Array.isArray(cart.value) ? cart.value.reduce((sum, p) => sum + p.quantity, 0) : 0))
+const cartCount = computed(() =>
+  Array.isArray(cart.value)
+    ? cart.value.reduce((sum, p) => sum + p.quantity, 0)
+    : 0
+)
 
-
-// Usuário logado
-const user = computed(() => usePage().props.auth?.user)
-
-// Contador da wishlist
 const wishlistCount = ref(0)
-
-if (user.value) {
-  wishlistCount.value = user.value.wishlist_count ?? 0
+if (user) {
+  wishlistCount.value = user.wishlist_count ?? 0
 } else {
-  const key = 'wishlist_cache'
-  const cached = localStorage.getItem(key)
-
+  const cached = localStorage.getItem('wishlist_cache')
   if (cached) {
     const parsed = JSON.parse(cached)
     const now = Date.now()
     const validade = 4 * 24 * 60 * 60 * 1000
-
     if (now - parsed.timestamp < validade) {
       wishlistCount.value = parsed.items?.length || 0
     } else {
-      localStorage.removeItem(key)
+      localStorage.removeItem('wishlist_cache')
     }
   }
 }
-
-// Categorias dinâmicas do menu (ex: vindas de props)
-const menuCategories = usePage().props.menuCategories ?? []
-
-// Categorias fixas para a barra verde
-const categorias = [
-  { nome: 'Vinhos', slug: 'vinhos' },
-  { nome: 'Queijos', slug: 'queijos' },
-  { nome: 'Azeites', slug: 'azeites' },
-  { nome: 'Doces', slug: 'doces' },
-  { nome: 'Artesanato', slug: 'artesanato' },
-]
 </script>

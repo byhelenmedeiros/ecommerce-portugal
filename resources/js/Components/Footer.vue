@@ -1,6 +1,6 @@
 <template>
   <footer class="bg-gray-900 text-gray-300 text-sm pt-12 pb-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 
       <!-- Sobre a Loja -->
       <div>
@@ -52,7 +52,6 @@
       </div>
     </div>
 
-    <!-- Linha final -->
     <div class="mt-10 text-center text-gray-500 text-xs">
       Este site está em conformidade com o Decreto-Lei n.º 24/2014 e o RGPD (UE) 2016/679.
     </div>

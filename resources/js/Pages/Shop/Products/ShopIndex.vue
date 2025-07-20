@@ -2,12 +2,12 @@
   <GuestLayout>
     <template #default>
       <!-- Breadcrumb -->
-      <nav class="text-sm text-gray-500  max-w-7xl mx-auto py-3 px-4">
+<nav class="text-sm text-gray-500 w-full max-w-[1600px] mx-auto py-3  px-4">
         <Link href="/" class="hover:underline text-green-700">Início</Link> /
         <span class="text-gray-600">Produtos</span>
       </nav>
 
-      <section class="max-w-7xl mx-auto px-2">
+<section class="w-full max-w-[1600px] mx-auto px-2 ">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
 
        <div class="md:col-span-3">
@@ -212,7 +212,7 @@ const props = defineProps({
   products: Object,
   filters: Object,
   categories: Array,
-  auth: Object // ← usado para verificar se o utilizador está autenticado
+  auth: Object  
 })
 
 // Stores

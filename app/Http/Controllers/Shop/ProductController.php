@@ -7,12 +7,22 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Inertia\Inertia;
 use App\Models\Category;
+use App\Models\Subcategory;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
   public function index(Request $request)
-{
+{   
+     $categories = \App\Models\Category::select('id', 'name', 'slug')
+        ->orderBy('name')
+    ->get();
+
+    
+$subcategorias = Subcategory::select('id', 'name', 'slug')
+        ->orderBy('name')
+        ->get();
+
     $query = Product::query()->with('category');
 
     if ($request->filled('name')) {
@@ -51,9 +61,11 @@ class ProductController extends Controller
 
     $products = $query->paginate(12);
     $categories = Category::orderBy('name')->get();
+    
 
     return Inertia::render('Shop/Products/ShopIndex', [
         'products' => $products,
+           'subcategories' => Subcategory::select('id', 'category_id', 'name', 'slug')->get(), 
         'categories' => $categories,
         'filters' => $request->only([
             'name', 'category', 'min_price', 'max_price', 'sort', 'in_stock', 'out_of_stock'

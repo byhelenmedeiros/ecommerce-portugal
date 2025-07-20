@@ -1,7 +1,7 @@
 <template>
   <Head title="Gestão de loja" />
 
-  <div class="min-h-screen flex bg-gray-100 text-gray-800">
+  <div class="min-h-screen  flex bg-gray-100 text-gray-800">
     <!-- Sidebar -->
     <aside class="w-56 bg-white border-r shadow-sm hidden md:flex flex-col justify-between">
       <div>
@@ -40,6 +40,12 @@
             </button>
             <div v-if="isOpenCategorias" class="ml-6 space-y-1 text-xs">
               <Link :href="route('admin.categories.index')" class="block px-3 py-2 rounded hover:bg-green-100">Ver Categorias</Link>
+            </div>
+            
+            <div v-if="isOpenCategorias" class="ml-6 space-y-1 text-xs">
+              <Link v-for="sub in subcategorias" :key="sub.id" :href="route('admin.subcategories.index', { category: sub.category.slug })" class="block px-3 py-2 rounded hover:bg-green-100">
+                {{ sub.name }}
+              </Link>
             </div>
           </div>
 

@@ -28,16 +28,30 @@ class HandleInertiaRequests extends Middleware
      *
      * @return array<string, mixed>
      */
-     public function share(Request $request): array
-    {
-        return array_merge(parent::share($request), [
-            'auth' => [
-                'user' => fn () => $request->user()
-                    ? $request->user()->only('id', 'name', 'email') + [
-                        'wishlist_count' => $request->user()->wishlists()->count(),
-                    ]
-                    : null,
-            ],
-        ]);
-    }
+    public function share(Request $request): array
+{
+    return array_merge(parent::share($request), [
+        'auth' => [
+            'user' => fn () => $request->user()
+                ? $request->user()->only([
+                    'id',
+                    'name',
+                    'email',
+                    'created_at',
+                    'fiscalAddress',
+                    'entregaAddress',
+                    'phone',
+                    'phone_alt',
+                    'birth_date',
+                    'billing_name',
+                    'nif',
+                    'nif_on_invoice',
+                ]) + [
+                    'wishlist_count' => $request->user()->wishlists()->count(),
+                ]
+                : null,
+        ],
+    ]);
+}
+
 }

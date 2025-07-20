@@ -1,9 +1,8 @@
 import './bootstrap'
 import '../css/app.css'
 
-import { createApp,  } from 'vue'
-import { createInertiaApp  } from '@inertiajs/vue3'
-
+import { createApp, h } from 'vue'
+import { createInertiaApp } from '@inertiajs/vue3'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 import { ZiggyVue } from '../../vendor/tightenco/ziggy'
 import VueTelInput from 'vue-tel-input'
@@ -14,7 +13,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import * as solidIcons from '@fortawesome/free-solid-svg-icons'
 import * as regularIcons from '@fortawesome/free-regular-svg-icons'
 import * as brandIcons from '@fortawesome/free-brands-svg-icons'
-import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
 
 
 import { createPinia } from 'pinia'
@@ -23,16 +21,15 @@ import { createPinia } from 'pinia'
 const regular = Object.keys(regularIcons).filter(k => k !== 'far' && k !== 'prefix').map(k => regularIcons[k])
 const brands = Object.keys(brandIcons).filter(k => k !== 'fab' && k !== 'prefix').map(k => brandIcons[k])
 library.add(...solid, ...regular, ...brands)
-library.add(faCartShopping)
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel'
 
 createInertiaApp({
-  title: title => `${title} - ${appName}`,
+title: title => `${title} - ${appName}`,
   resolve: name =>
     resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
   setup({ el, App, props, plugin }) {
-    const app = createApp({ render: () => (App, props) })
+    const app = createApp({ render: () => h(App, props) })
 
     const pinia = createPinia()
     app.use(pinia)

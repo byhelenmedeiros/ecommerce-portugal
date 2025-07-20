@@ -1,5 +1,7 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { usePage } from '@inertiajs/vue3'
+
 import SidebarLink from '@/Components/SidebarLink.vue'
 import Navbar from '@/Components/Navbar.vue'
 import Footer from '@/Components/Footer.vue'
@@ -9,7 +11,9 @@ import MeusPedidos from './Tabs/MeusPedidos.vue'
 import Morada from './Tabs/Morada.vue'
 import Wishlist from './Tabs/Wishlist.vue'
 
-const props = defineProps({ user: Object })
+const page = usePage()
+const user = computed(() => page.props.auth?.user ?? {})
+
 const activeTab = ref('dados')
 </script>
 
@@ -18,26 +22,38 @@ const activeTab = ref('dados')
     <Navbar />
 
     <main class="max-w-7xl w-full mx-auto py-10 px-4 lg:flex lg:space-x-6 flex-1">
+      <!-- Sidebar -->
       <aside class="w-full lg:w-1/4 bg-white rounded shadow-sm mb-6 lg:mb-0">
         <nav class="p-4 space-y-2 text-sm font-medium text-gray-700">
-          <SidebarLink icon="user" label="Dados Pessoais" :active="activeTab === 'dados'"
-            @select="activeTab = 'dados'" />
-          <SidebarLink icon="box" label="Meus Pedidos" :active="activeTab === 'pedidos'"
-            @select="activeTab = 'pedidos'" />
-          <SidebarLink icon="location-dot" label="Morada" :active="activeTab === 'morada'"
-            @select="activeTab = 'morada'" />
-          <SidebarLink icon="heart" label="Wishlist" :active="activeTab === 'Wishlist'"
-            @select="activeTab = 'Wishlist'" />
+          <SidebarLink icon="user" label="Dados Pessoais" :active="activeTab === 'dados'" @select="activeTab = 'dados'" />
+          <SidebarLink icon="box" label="Meus Pedidos" :active="activeTab === 'pedidos'" @select="activeTab = 'pedidos'" />
+          <SidebarLink icon="location-dot" label="Morada" :active="activeTab === 'morada'" @select="activeTab = 'morada'" />
+          <SidebarLink icon="heart" label="Wishlist" :active="activeTab === 'Wishlist'" @select="activeTab = 'Wishlist'" />
         </nav>
       </aside>
 
+      <!-- Conteúdo das abas -->
       <section class="flex-1 space-y-6">
         <transition name="fade-slide" mode="out-in">
           <div :key="activeTab" class="bg-white p-6 rounded shadow">
-            <DadosPessoais v-if="activeTab === 'dados'" :user="user" />
-            <MeusPedidos v-else-if="activeTab === 'pedidos'" />
-            <Morada v-else-if="activeTab === 'morada'" :fiscal="user.fiscalAddress" :entrega="user.entregaAddress" />
-            <Wishlist v-else-if="activeTab === 'Wishlist'" />
+            <DadosPessoais
+              v-if="activeTab === 'dados'"
+              :user="user"
+            />
+
+            <MeusPedidos
+              v-else-if="activeTab === 'pedidos'"
+            />
+
+            <Morada
+              v-else-if="activeTab === 'morada'"
+              :fiscal="user?.fiscalAddress || {}"
+              :entrega="user?.entregaAddress || {}"
+            />
+
+            <Wishlist
+              v-else-if="activeTab === 'Wishlist'"
+            />
           </div>
         </transition>
       </section>
@@ -52,7 +68,6 @@ const activeTab = ref('dados')
 .fade-slide-leave-active {
   transition: all 0.3s ease;
 }
-
 .fade-slide-enter-from,
 .fade-slide-leave-to {
   opacity: 0;

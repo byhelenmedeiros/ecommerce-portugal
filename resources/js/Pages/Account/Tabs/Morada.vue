@@ -3,23 +3,41 @@ import AddressCard from '../Partials/AddressCard.vue'
 import { ref, watch } from 'vue'
 
 const props = defineProps({
-  fiscal: Object,
-  entrega: Object,
+  fiscal: {
+    type: Object,
+    default: () => ({})
+  },
+  entrega: {
+    type: Object,
+    default: () => ({})
+  },
 })
 
-const fiscalAddress = ref(props.fiscal)
-const entregaAddress = ref(props.entrega)
+const fiscalAddress = ref({ ...props.fiscal })
+const entregaAddress = ref({ ...props.entrega })
 
 watch(() => props.fiscal, (val) => {
-  fiscalAddress.value = val
+  fiscalAddress.value = val ?? {}
 })
 
 watch(() => props.entrega, (val) => {
-  entregaAddress.value = val
+  entregaAddress.value = val ?? {}
 })
 
 function copiarFiscalParaEntrega() {
+  if (!fiscalAddress.value || Object.keys(fiscalAddress.value).length === 0) {
+    toast('A morada fiscal está vazia!')
+    return
+  }
   entregaAddress.value = { ...fiscalAddress.value }
+}
+
+function toast(msg) {
+  const el = document.createElement('div')
+  el.textContent = msg
+  el.className = 'fixed bottom-5 right-5 bg-red-600 text-white px-4 py-2 rounded shadow text-sm animate-fade-in-out'
+  document.body.appendChild(el)
+  setTimeout(() => el.remove(), 3000)
 }
 </script>
 
@@ -40,11 +58,9 @@ function copiarFiscalParaEntrega() {
       title="Morada Fiscal"
       :initial-address="fiscalAddress"
       update-url="account.address.account.fiscal"
+      delete-url="account.address.account.fiscal"
       @updated="val => fiscalAddress.value = val"
-       delete-url="account.address.account.entrega" 
-      @delete="entregaAddress.value = {}" 
-    
-
+      @deleted="fiscalAddress.value = {}"
     />
 
     <!-- Morada Entrega -->
@@ -52,25 +68,28 @@ function copiarFiscalParaEntrega() {
       title="Morada de Entrega"
       :initial-address="entregaAddress"
       update-url="account.address.account.entrega"
-      @updated="val => entregaAddress.value = val"
       delete-url="account.address.account.entrega"
-      @delete="entregaAddress.value = {}"
+      @updated="val => entregaAddress.value = val"
+      @deleted="entregaAddress.value = {}"
     />
   </div>
 </template>
 
 <style scoped>
 @keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-in {
   animation: fade-in 0.4s ease-out;
+}
+@keyframes fade-in-out {
+  0% { opacity: 0; transform: translateY(10px); }
+  20% { opacity: 1; transform: translateY(0); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(10px); }
+}
+.animate-fade-in-out {
+  animation: fade-in-out 3s ease-in-out forwards;
 }
 </style>

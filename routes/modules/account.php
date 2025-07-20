@@ -7,9 +7,6 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Shop\OrderController as ShopOrderController;
 use App\Http\Controllers\Shop\WishlistController;
 
-// Página inicial (exemplo de fallback ou teste local)
-Route::get('/', fn () => Inertia::render('Account/Index'))->name('home');
-
 // Grupo autenticado com prefixo "account"
 Route::middleware(['auth'])->prefix('account')->name('account.')->group(function () {
     

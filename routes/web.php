@@ -25,7 +25,7 @@ Route::get('/', function () {
     return Inertia::render('Shop/Home');
 });
 
-Route::get('/', [HomeController::class, 'index']);
+
 
  
 Route::get('/search', [SearchController::class, 'index'])->name('search');

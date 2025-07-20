@@ -35,6 +35,7 @@ class AccountController extends Controller
  public function update(Request $request)
 {
     $request->validate([
+        
         'name'            => 'required|string|max:255',
         'email'           => 'required|email|max:255|unique:users,email,' . auth()->id(),
         'phone'           => 'nullable|string|max:20',

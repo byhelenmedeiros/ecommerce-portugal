@@ -1,5 +1,19 @@
 <template>
+
+
   <div class="bg-white">
+    <div class="bg-red-800 overflow-hidden">
+  <div class="h-8 relative">
+    <div
+      class="absolute inset-0 flex items-center justify-center text-white text-xs font-medium animate-marquee"
+    >
+      <span v-if="messages.length" class="inline-block whitespace-nowrap transition-opacity duration-500 ease-in-out">
+        {{ messages[currentMessageIndex] }}
+      </span>
+    </div>
+  </div>
+</div>
+
     <!-- Nav principal -->
     <nav class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-2">
       <div class="flex justify-between items-center h-16">
@@ -23,23 +37,7 @@
 
         <div class="flex items-center gap-6 text-gray-700 text-sm">
           <!-- Wishlist -->
-          <div class="relative group">
-            <a
-              :href="user ? '/wishlist' : '/login'"
-              class="relative flex flex-col items-center justify-center hover:text-pink-600 transition-transform duration-200 transform hover:scale-110"
-            >
-              <FontAwesomeIcon :icon="['fas', 'heart']" class="text-2xl sm:text-2xl drop-shadow-sm" />
-              <span class="text-[10px] sm:text-xs mt-1 font-medium">
-                {{ user ? 'Wishlist' : 'Login' }}
-              </span>
-              <span
-                v-if="user && wishlistCount > 0"
-                class="absolute -top-2 -right-2 w-5 h-5 bg-pink-600 text-white text-[10px] sm:text-xs font-bold rounded-full flex items-center justify-center shadow-md"
-              >
-                {{ wishlistCount }}
-              </span>
-            </a>
-          </div>
+         
 
           <!-- Carrinho -->
           <div class="relative group">
@@ -94,10 +92,31 @@
               </a>
             </div>
           </div>
+<div class="w-full md:w-auto md:flex-shrink-0 flex items-center gap-4">
+  <!-- Ícone Wishlist -->
+     <SearchBar />
+  <div class="relative group">
+    
 
-          <div class="w-full md:w-auto md:flex-shrink-0">
-            <SearchBar class="w-full md:w-[320px] lg:w-[400px]" />
-          </div>
+    <a
+      :href="user ? '/wishlist' : '/login'"
+      class="relative flex flex-col items-center justify-center hover:text-pink-600 transition-transform duration-200 transform hover:scale-110"
+    >
+      <FontAwesomeIcon :icon="['fas', 'heart']" class="text-2xl sm:text-2xl drop-shadow-sm" />
+      <span class="text-[10px] sm:text-xs mt-1 font-medium text-red-600">
+        {{ user ? ' ' : 'Login' }}
+      </span>
+      <span
+        v-if="user && wishlistCount > 0"
+        class="absolute -top-2 -right-2 w-5 h-5 bg-pink-600 text-white text-[10px] sm:text-xs font-bold rounded-full flex items-center justify-center shadow-md"
+      >
+        {{ wishlistCount }}
+      </span>
+    </a>
+  </div>
+
+</div>
+
         </div>
       </div>
     </div>
@@ -107,9 +126,9 @@
 
 <script setup>
 import SearchBar from '@/Components/SearchBar.vue'
-import { computed, ref } from 'vue'
+import { computed, ref , onMounted } from 'vue'
 import { useCart } from '@/stores/cart'
-import { usePage } from '@inertiajs/vue3'
+import { usePage, Link } from '@inertiajs/vue3'
 
 const page = usePage()
 const subcategories = page.props.subcategories ?? []
@@ -139,4 +158,20 @@ if (user) {
     }
   }
 }
+
+const messages = [
+  '🚚 Entrega gratuita em compras acima de €50!',
+  '↩️ Devolução gratuita em 14 dias',
+  '🇵🇹 Produtos autênticos do Norte de Portugal',
+  '🛒 Compre com segurança e rapidez!'
+]
+
+const currentMessageIndex = ref(0)
+
+onMounted(() => {
+  setInterval(() => {
+    currentMessageIndex.value = (currentMessageIndex.value + 1) % messages.length
+  }, 4000) // troca a cada 4 segundos
+})
 </script>
+

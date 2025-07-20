@@ -3,9 +3,9 @@
     <!-- Botão de abrir modal -->
     <button
       @click="showPopup = true"
-      class="text-green-600 hover:text-red-600 text-xl transition-all duration-200"
+      class="text-gray-800 hover:text-red-600 text-xl transition-all duration-200"
     >
-      <font-awesome-icon :icon="['fas', 'search']" />
+      <font-awesome-icon :icon="['fas', 'search']"/>
     </button>
 
     <!-- Modal de busca -->

@@ -13,8 +13,7 @@ const props = defineProps({
   }
 })
 
-console.log('🟢 PROPS:', props)
-</script>
+ </script>
 
 <template>
   <GuestLayout>
@@ -26,10 +25,10 @@ console.log('🟢 PROPS:', props)
       </h2>
 
       <p class="text-gray-600 text-sm mb-8">
-        {{ products.data.length ? 'Mostrando produtos encontrados:' : 'Nenhum produto encontrado.' }}
+        {{ (products?.data?.length ?? 0) > 0 ? 'Mostrando produtos encontrados:' : 'Nenhum produto encontrado.' }}
       </p>
 
-      <div v-if="products.data.length" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div v-if="products?.data?.length" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <div
           v-for="product in products.data"
           :key="product.id"

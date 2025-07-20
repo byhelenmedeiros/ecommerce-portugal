@@ -1,5 +1,5 @@
 <template>
-  <AuthenticatedLayout>
+  <GuestLayout>
     <Head title="Perfil" />
 
     <div class="max-w-3xl mx-auto p-6 bg-white shadow rounded">
@@ -37,16 +37,16 @@
         </PrimaryButton>
       </form>
     </div>
-  </AuthenticatedLayout>
+  </GuestLayout>
 </template>
 
 <script setup>
 import { Head, useForm } from '@inertiajs/vue3';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import GuestLayout from '@/Layouts/GuestLayout.vue';
 
 defineProps({
   profile: Object,

@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
+
 
 class Product extends Model
 {
+   use HasFactory, Searchable;
+
    protected $fillable = [
     'name',
     'slug',
@@ -39,8 +43,6 @@ protected $casts = [
     'is_visible' => 'boolean',
     'highlighted' => 'boolean',
 ];
-
-    use HasFactory;
 
     public function category()
     {
@@ -90,6 +92,13 @@ public function files()
     return $this->hasMany(ProductFile::class);
 }
 
+public function toSearchableArray()
+{
+    return [
+        'name' => $this->name,
+        'description' => $this->description,
+    ];
+}
 
     
 }

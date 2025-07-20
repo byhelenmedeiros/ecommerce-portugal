@@ -43,3 +43,4 @@ Route::get('/shop/{product}', [ProductController::class, 'show'])->name('shop.pr
 
 Route::inertia('/cart', 'CartPage')->name('cart');
 
+

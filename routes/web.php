@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\CustomerProfileController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\HomeController;
-
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,11 +27,9 @@ Route::get('/', function () {
 
 Route::get('/', [HomeController::class, 'index']);
 
+ 
+Route::get('/search', [SearchController::class, 'index'])->name('search');
 
-
-Route::get('/search', function () {
-    return Inertia::render('Shop/Search');
-});
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');

@@ -1,84 +1,107 @@
 <template>
-  <form @submit.prevent="submit" class="relative w-full max-w-xl">
-    <input
-      v-model="query"
-      type="text"
-      :placeholder="placeholder"
-      @focus="handleFocus"
-      @blur="handleBlur"
-      class="w-full px-4 py-1 pr-10 rounded-md border border-gray-300 bg-white text-sm text-gray-800 placeholder-gray-400 shadow-sm focus:outline-none "
-    />
+  <div class="relative">
+    <!-- Botão de abrir modal -->
     <button
-      type="submit"
-      class="absolute right-3 top-1/2 -translate-y-1/2 text-green-600 hover:text-red-600 transition text-base"
+      @click="showPopup = true"
+      class="text-green-600 hover:text-red-600 text-xl transition-all duration-200"
     >
       <font-awesome-icon :icon="['fas', 'search']" />
     </button>
-  </form>
+
+    <!-- Modal de busca -->
+    <transition name="slide-down">
+      <div
+        v-if="showPopup"
+        class="fixed inset-0 z-50 bg-white/90 backdrop-blur-sm flex flex-col items-center px-4 pt-10 sm:pt-20"
+      >
+        <!-- Botão de Fechar -->
+        <button
+          @click="showPopup = false"
+          class="absolute top-4 right-4 text-gray-500 hover:text-red-600 text-2xl"
+        >
+          <font-awesome-icon :icon="['fas', 'xmark']" />
+        </button>
+
+        <!-- Campo de Pesquisa com ícone -->
+        <form @submit.prevent="submit" class="w-full max-w-xl relative">
+          <font-awesome-icon
+            :icon="['fas', 'search']"
+            class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-base"
+          />
+          <input
+            v-model="query"
+            type="text"
+            placeholder="Pesquisar..."
+            class="w-full pl-10 pr-4 py-3 text-lg border-b border-gray-400 bg-transparent text-gray-800 focus:outline-none focus:border-green-600"
+            autofocus
+          />
+        </form>
+
+        <!-- Sugestões -->
+        <div class="mt-6 w-full max-w-xl">
+          <h2 class="text-sm font-semibold text-gray-700 mb-3">Sugestões populares</h2>
+          <ul class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm text-gray-600">
+            <li
+              v-for="sugestao in sugestões"
+              :key="sugestao"
+              @click="selectSuggestion(sugestao)"
+              class="cursor-pointer px-3 py-2 rounded hover:bg-gray-100 transition"
+            >
+              {{ sugestao }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </transition>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { ref } from 'vue'
 
+const showPopup = ref(false)
 const query = ref('')
-const placeholder = ref('Pesquisar...')
-const paused = ref(false)
 
 const sugestões = [
   'vinhos portugueses',
   'azeites artesanais',
   'queijos do norte',
   'doces tradicionais',
-  'artesanato local',
+  'bordados minhotos',
+  'cerâmica portuguesa',
+  'compotas caseiras'
 ]
-
-let index = 0
-let subindex = 0
-let apagar = false
-let speed = 80
-
-const handleFocus = () => {
-  paused.value = true
-  placeholder.value = ''
-}
-
-const handleBlur = () => {
-  paused.value = false
-  placeholder.value = 'Pesquisar por ' + sugestões[index].substring(0, subindex)
-}
-
-const typewriter = () => {
-  if (paused.value) return setTimeout(typewriter, 200)
-
-  const atual = sugestões[index]
-
-  if (!apagar) {
-    placeholder.value = 'Pesquisar por ' + atual.substring(0, subindex++)
-  } else {
-    placeholder.value = 'Pesquisar por ' + atual.substring(0, subindex--)
-  }
-
-  if (!apagar && subindex === atual.length + 1) {
-    apagar = true
-    return setTimeout(typewriter, 1000)
-  }
-
-  if (apagar && subindex === 0) {
-    apagar = false
-    index = (index + 1) % sugestões.length
-  }
-
-  setTimeout(typewriter, apagar ? 40 : speed)
-}
-
-onMounted(() => {
-  typewriter()
-})
 
 const submit = () => {
   if (query.value.trim()) {
     window.location.href = `/search?query=${encodeURIComponent(query.value)}`
   }
 }
+
+const selectSuggestion = (texto) => {
+  query.value = texto
+  showPopup.value = false
+  submit()
+}
 </script>
+
+<style scoped>
+.slide-down-enter-active {
+  transition: all 0.3s ease-out;
+  transform: translateY(-100%);
+  opacity: 0;
+}
+.slide-down-enter-to {
+  transform: translateY(0);
+  opacity: 1;
+}
+.slide-down-leave-active {
+  transition: all 0.2s ease-in;
+  transform: translateY(0);
+  opacity: 1;
+}
+.slide-down-leave-to {
+  transform: translateY(-20%);
+  opacity: 0;
+}
+</style>

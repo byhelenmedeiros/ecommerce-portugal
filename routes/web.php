@@ -55,3 +55,4 @@ require __DIR__.'/modules/order.php';
 require __DIR__.'/modules/import.php';
 require __DIR__.'/modules/wishlist.php';
 require __DIR__.'/modules/account.php';
+require __DIR__.'/modules/users.php';

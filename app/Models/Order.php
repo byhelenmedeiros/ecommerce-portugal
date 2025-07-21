@@ -6,11 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = [
-        'user_id',
-        'status',
-        'total',
-    ];
+   protected $fillable = [
+    'user_id',
+    'fiscal_address_id',
+    'entrega_address_id',
+    'status',
+    'subtotal',
+    'shipping_cost',
+    'discount',
+    'total',
+    'payment_method',
+    'shipping_method',
+    'admin_note',
+    'payment_proof',
+];
+
 
     public function user()
     {
@@ -21,4 +31,5 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+   
 }

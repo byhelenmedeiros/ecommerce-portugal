@@ -3,9 +3,9 @@
 
   <div class="min-h-screen  flex bg-gray-100 text-gray-800">
     <!-- Sidebar -->
-    <aside class="w-56 bg-white border-r shadow-sm hidden md:flex flex-col justify-between">
+    <aside class="w-48 bg-white border-r shadow-sm hidden md:flex flex-col justify-between">
       <div>
-        <div class="p-4 text-xl font-bold text-green-700 border-b">ALMAMINHOTA</div>
+        <div class="p-2 text-md font-bold text-green-700 border-b">ALMAMINHOTA</div>
         <nav class="p-4 space-y-1 text-sm">
 
           <!-- Dashboard -->
@@ -59,8 +59,7 @@
               <font-awesome-icon :icon="isOpenPedidos ? 'fa-chevron-up' : 'fa-chevron-down'" class="text-xs" />
             </button>
             <div v-if="isOpenPedidos" class="ml-6 space-y-1 text-xs">
-              <Link :href="route('admin.orders.index')" class="block px-3 py-2 rounded hover:bg-green-100">Todos os Pedidos</Link>
-              <!-- Adicione outras rotas de pedidos aqui se existirem -->
+<Link :href="route('orders.index')" class="block px-3 py-2 rounded hover:bg-green-100">Todos os Pedidos</Link>
             </div>
           </div>
 
@@ -78,7 +77,7 @@
     </aside>
 
     <!-- Conteúdo Principal -->
-    <div class="flex-1 p-6 overflow-x-auto">
+    <div class="flex-1 p-2 overflow-x-auto">
       <slot />
     </div>
   </div>

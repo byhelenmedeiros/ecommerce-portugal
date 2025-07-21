@@ -7,44 +7,58 @@
     </template>
 
     <div class="py-2">
-      <div class="mx-auto sm:px-4 lg:px-6">
+      <div class="mx-auto ">
+         <h3 class="text-md font-semibold text-gray-700 p-3">Lista de Pedidos</h3>
         <div class="bg-white border rounded shadow-sm">
-          <div class="p-4 border-b flex items-center justify-between">
-            <h3 class="text-sm font-semibold text-gray-700">Lista de Pedidos</h3>
-          </div>
+         
 
           <div class="overflow-x-auto">
-            <table class="min-w-full text-xs text-left border divide-y">
-              <thead class="bg-gray-50 text-gray-600">
-                <tr>
-                  <th class="p-2">#</th>
-                  <th class="p-2">Cliente</th>
-                  <th class="p-2">Total</th>
-                  <th class="p-2">Status</th>
-                  <th class="p-2">Criado em</th>
-                  <th class="p-2 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="order in orders" :key="order?.id ?? `null-${Math.random()}`" v-if="order && order.id" class="hover:bg-gray-50 border-b">
-                  <td class="p-2 text-gray-700">#{{ order.id }}</td>
-                  <td class="p-2">{{ order.user?.name ?? '—' }}</td>
-                  <td class="p-2 font-medium">€ {{ Number(order.total ?? 0).toFixed(2) }}</td>
-                  <td class="p-2">
-                    <span :class="statusClass(order.status)">{{ order.status }}</span>
-                  </td>
-                  <td class="p-2 text-gray-500">{{ new Date(order.created_at).toLocaleDateString() }}</td>
-                  <td class="p-2 text-right space-x-2">
-                    <Link :href="route('admin.orders.show', { order: order.id })" class="text-blue-600 hover:underline">Ver</Link>
-                    <button class="text-red-600 hover:underline">Cancelar</button>
-                  </td>
-                </tr>
+        <table class="min-w-full text-xs text-left border divide-y">
+  <thead class="bg-gray-50 text-gray-600 uppercase tracking-wide">
+    <tr>
+      <th class="p-2">#ID</th>
+      <th class="p-2">Cliente</th>
+      <th class="p-2">Email</th>
+      <th class="p-2 text-right">Total</th>
+      <th class="p-2">Pagamento</th>
+      <th class="p-2">Status</th>
+      <th class="p-2">Data</th>
+      <th class="p-2 text-right">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr v-for="order in props.orders.data" :key="order.id">
 
-                <tr v-if="!orders || !orders.length">
-                  <td colspan="6" class="text-center p-4 text-gray-500">Nenhum pedido encontrado.</td>
-                </tr>
-              </tbody>
-            </table>
+
+      <td class="p-2 font-medium">#{{ order.id }}</td>
+      <td class="p-2">{{ order.user?.name ?? '—' }}</td>
+      <td class="p-2 text-gray-500">{{ order.user?.email ?? '—' }}</td>
+      <td class="p-2 text-right font-semibold">€ {{ Number(order.total ?? 0).toFixed(2) }}</td>
+      <td class="p-2">{{ order.payment_method ?? '—' }}</td>
+      <td class="p-2">
+        <span :class="statusClass(order.status)">
+          {{ order.status }}
+        </span>
+      </td>
+      <td class="p-2 text-gray-500">
+        {{ new Date(order.created_at).toLocaleDateString() }}
+      </td>
+      <td class="p-2 text-right space-x-2">
+<Link
+  v-if="order && order.id"
+  :href="route('orders.show', { order: order.id })"
+  class="text-blue-600 hover:underline"
+>
+  Ver
+</Link>
+        <button class="text-red-600 hover:underline">Cancelar</button>
+      </td>
+    </tr>
+
+   
+  </tbody>
+</table>
+
           </div>
         </div>
       </div>
@@ -55,21 +69,25 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Link } from '@inertiajs/vue3';
-
 const props = defineProps({
-  orders: Array
+  orders: Object
 });
+console.log('Orders recebidos:', props.orders);
+
+
 
 const statusClass = (status) => {
   switch (status) {
     case 'pago':
-      return 'text-green-600 font-semibold';
+      return 'bg-green-100 text-green-700 font-semibold px-2 py-1 rounded text-xs';
     case 'pendente':
-      return 'text-yellow-600 font-semibold';
+      return 'bg-yellow-100 text-yellow-700 font-semibold px-2 py-1 rounded text-xs';
     case 'cancelado':
-      return 'text-red-600 font-semibold';
+      return 'bg-red-100 text-red-700 font-semibold px-2 py-1 rounded text-xs';
     default:
-      return 'text-gray-600';
+      return 'bg-gray-100 text-gray-700 font-medium px-2 py-1 rounded text-xs';
   }
 };
+
+
 </script>

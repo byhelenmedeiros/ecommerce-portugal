@@ -99,6 +99,11 @@ public function toSearchableArray()
         'description' => $this->description,
     ];
 }
+public function orderItems()
+{
+    return $this->hasMany(OrderItem::class);
+}
+
 
     
 }

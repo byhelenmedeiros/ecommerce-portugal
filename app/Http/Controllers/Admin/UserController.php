@@ -25,8 +25,7 @@ public function index()
 }
 public function show(User $user)
 {
-    $user->load(['orders', 'addresses']); // <- relacionamento com pedidos e moradas
-
+    $user->load(['orders', 'addresses']);  
     return Inertia::render('Admin/Users/Show', [
         'cliente' => $user,
     ]);

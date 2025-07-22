@@ -66,6 +66,10 @@
             <font-awesome-icon icon="fa-solid fa-users" class="text-green-600" />
             Clientes
           </Link>
+          <Link :href="route('admin.tags.index')" class="flex items-center gap-3 px-3 py-2 rounded hover:bg-green-100">
+            <font-awesome-icon icon="fa-solid fa-tags" class="text-green-600" />
+            Gestão de Etiquetas
+          </Link>
 
           <!-- Logout -->
           <Link :href="route('logout')" method="post" as="button" class="flex items-center gap-3 px-3 py-2 rounded hover:bg-red-100 mt-4">
@@ -93,4 +97,8 @@ import { Link, Head } from '@inertiajs/vue3';
 const isOpenProdutos = ref(false);
 const isOpenCategorias = ref(false);
 const isOpenPedidos = ref(false);
+
+defineProps({
+  title: String
+})
 </script>

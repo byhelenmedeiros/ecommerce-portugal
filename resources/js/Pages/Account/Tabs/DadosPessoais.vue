@@ -22,7 +22,9 @@ const form = useForm({
   birth_date: props.user.birth_date || '',
   billing_name: props.user.billing_name || '',
   nif: props.user.nif || '',
-  nif_on_invoice: !!props.user.nif_on_invoice
+  nif_on_invoice: !!props.user.nif_on_invoice,
+  newsletter: props.user.newsletter || false,
+  lgpd_consent: props.user.lgpd_consent || false,
 })
 
 // Recarrega dados se `props.user` for atualizado
@@ -35,6 +37,8 @@ watch(() => props.user, (newUser) => {
   form.billing_name = newUser.billing_name || ''
   form.nif = newUser.nif || ''
   form.nif_on_invoice = !!newUser.nif_on_invoice
+  form.newsletter = newUser.newsletter || false
+  form.lgpd_consent = newUser.lgpd_consent || false
 }, { immediate: true })
 
 const cancelEdit = () => {
@@ -51,15 +55,21 @@ const displayFields = [
   { label: 'Nome para faturação', key: 'billing_name' },
   { label: 'NIF', key: 'nif' },
   { label: 'Deseja NIF na fatura?', key: 'nif_on_invoice' },
+  { label: 'Newsletter', key: 'newsletter' },
+  { label: 'Consentimento LGPD', key: 'lgpd_consent' },
 ]
 
 const formatField = (key) => {
   const val = props.user?.[key]
   if (!val) return '—'
   if (key === 'nif_on_invoice') return val ? 'Sim' : 'Não'
+  if (key === 'newsletter') return val ? 'Sim' : 'Não'
+  if (key === 'lgpd_consent') return val ? 'Sim' : 'Não'
+  if (key === 'birth_date' && val) return format(new Date(val), "dd 'de' MMMM 'de' yyyy", { locale: pt })
   if (key.includes('date')) return format(new Date(val), "dd 'de' MMMM 'de' yyyy", { locale: pt })
   return val
 }
+
 
 function submit() {
   form.patch(route('account.update'), {

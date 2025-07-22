@@ -52,7 +52,9 @@ class User extends Authenticatable
     protected $casts = [
        'email_verified_at' => 'datetime',
     'password' => 'hashed',
-    'nif_on_invoice' => 'boolean', 
+    'nif_on_invoice' => 'boolean',
+    'newsletter' => 'boolean',
+    'lgpd_consent' => 'boolean', 
     ];
 
     public function profile()
@@ -87,6 +89,15 @@ public function fiscalAddress()
 public function entregaAddress()
 {
     return $this->hasOne(Address::class)->where('type', 'entrega');
+}
+public function tags()
+{
+    return $this->belongsToMany(Tag::class);
+}
+
+public function customerTags()
+{
+    return $this->belongsToMany(CustomerTag::class);
 }
 
 

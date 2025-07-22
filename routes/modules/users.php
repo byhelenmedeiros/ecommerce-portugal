@@ -11,4 +11,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
        Route::post('/users/{user}/tags', [CustomerTagController::class, 'attach'])->name('users.tags.attach');
     Route::delete('/users/{user}/tags/{tag}', [CustomerTagController::class, 'detach'])->name('users.tags.detach');
 
+    Route::put('/users/{user}/notes', [UserController::class, 'updateNotes'])->name('users.notes.update');
+
+
 });

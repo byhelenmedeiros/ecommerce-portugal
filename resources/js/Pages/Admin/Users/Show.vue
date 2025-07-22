@@ -152,22 +152,29 @@
       </div>
 
       <!-- Aba: Notas Internas -->
-      <div v-if="activeTab === 'Notas Internas'" class="bg-white border rounded shadow-sm p-6">
-        <h2 class="text-lg font-semibold text-gray-800 mb-2">Notas Internas</h2>
-        <p class="text-sm text-gray-500">Este espaço pode ser usado para registar observações sobre o cliente (ex: VIP,
-          devoluções, etc).</p>
-        <!-- Futuro: textarea com autosave, badge, histórico -->
-      </div>
+   <div v-if="activeTab === 'Notas Internas'" class="bg-white border rounded shadow-sm p-6 space-y-4">
+  <h2 class="text-lg font-semibold text-gray-800">Notas Internas</h2>
+
+  <textarea
+    v-model="internalNotes"
+    @blur="saveNotes"
+    rows="5"
+    class="w-full border rounded px-3 py-2 text-sm"
+    placeholder="Escreva aqui observações confidenciais sobre o cliente..."
+  ></textarea>
+
+  <p v-if="saving" class="text-sm text-gray-400">A guardar...</p>
+</div>
+
 
     </div>
   </AdminLayout>
 </template>
 
 <script setup>
-import { Head, Link } from '@inertiajs/vue3'
+import { Head, Link, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { ref } from 'vue'
-import { router } from '@inertiajs/vue3'
 
 
 const props = defineProps({
@@ -203,6 +210,20 @@ function removeTag(tagId) {
   })
 }
 
+const internalNotes = ref(props.cliente.internal_notes ?? '')
+const saving = ref(false)
+
+function saveNotes() {
+  saving.value = true
+  router.put(route('admin.users.notes.update', props.cliente.id), {
+    internal_notes: internalNotes.value,
+  }, {
+    preserveScroll: true,
+    onFinish: () => {
+      saving.value = false
+    },
+  })
+}
 const orderHeaders = [
   { text: "ID", value: "id" },
   { text: "Total", value: "total" },

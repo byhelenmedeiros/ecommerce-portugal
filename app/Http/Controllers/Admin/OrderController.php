@@ -10,45 +10,59 @@ use Inertia\Inertia;
 class OrderController extends Controller
 {
     public function index()
-{
-    $this->authorize('viewAny', Order::class);
+    {
+        $this->authorize('viewAny', Order::class);
 
-    $orders = Order::with('user')->latest()->paginate(15);
+        $orders = Order::with('user')->latest()->paginate(15);
 
-    return Inertia::render('Admin/Orders/Index', [
-        'orders' => $orders
-    ]);
-}
+        return Inertia::render('Admin/Orders/Index', [
+            'orders' => $orders
+        ]);
+    }
 
 
-  public function show(Order $order)
-{
-    $order->load(['user', 'items']); // eager load dos relacionamentos
-    return Inertia::render('Admin/Orders/Show', [
-        'order' => $order,
-        'fiscalAddress' => $order->fiscal_address_id ? $order->fiscalAddress : null,
-        'entregaAddress' => $order->entrega_address_id ? $order->entregaAddress : null,
-        'items' => $order->items,
-        'products' => $order->items->map(function ($item) {
-            return $item->product; 
-        }),
-        'user' => $order->user,
-        'statusOptions' => ['pendente', 'pago', 'enviado', 'cancelado'],
-        'shippingMethods' => ['standard', 'express', 'pickup'],  
-        'paymentMethods' => ['credit_card', 'paypal', 'bank_transfer'],  
-        'adminNote' => $order->admin_note,
-        'paymentProof' => $order->payment_proof,
-    ])->with([
-        'success' => session('success'),
-    ]);
-}
+    public function show(Order $order)
+    {
+        $order->load(['user', 'items']); // eager load dos relacionamentos
+        return Inertia::render('Admin/Orders/Show', [
+            'order' => $order,
+            'fiscalAddress' => $order->fiscal_address_id ? $order->fiscalAddress : null,
+            'entregaAddress' => $order->entrega_address_id ? $order->entregaAddress : null,
+            'items' => $order->items,
+            'products' => $order->items->map(function ($item) {
+                return $item->product;
+            }),
+            'user' => $order->user,
+            'statusOptions' => ['pendente', 'pago', 'enviado', 'cancelado'],
+            'shippingMethods' => ['standard', 'express', 'pickup'],
+            'paymentMethods' => ['credit_card', 'paypal', 'bank_transfer'],
+            'adminNote' => $order->admin_note,
+            'paymentProof' => $order->payment_proof,
+        ])->with([
+            'success' => session('success'),
+        ]);
+    }
 
-   public function updateStatus(Request $request, Order $order)
-{
-    $request->validate(['status' => 'required|in:pendente,pago,enviado,cancelado']);
-    $order->update(['status' => $request->status]);
-    return redirect()->back()->with('success', 'Status atualizado com sucesso.');
-}
+    public function updateStatus(Request $request, Order $order)
+    {
+        $request->validate(['status' => 'required|in:pendente,pago,enviado,cancelado']);
+        $order->update(['status' => $request->status]);
+        return redirect()->back()->with('success', 'Status atualizado com sucesso.');
+
+        if ($request->status === 'pago') {
+            activity()
+                ->performedOn($order)
+                ->causedBy(auth()->user())
+                ->log("Pedido #{$order->id} foi pago");
+        }
+
+        if ($request->status === 'cancelado') {
+            activity()
+                ->performedOn($order)
+                ->causedBy(auth()->user())
+                ->log("Pedido #{$order->id} foi cancelado");
+        }
+    }
 
     public function destroy(Order $order)
     {
@@ -56,5 +70,20 @@ class OrderController extends Controller
         $order->delete();
         return redirect()->route('orders.index')->with('success', 'Pedido excluído com sucesso.');
     }
-    
+
+    public function store(Request $request)
+    {
+        $order = Order::create([
+            'user_id' => auth()->id(),
+            'total' => $request->total,
+            'status' => 'pendente',
+        ]);
+
+        activity()
+            ->performedOn($order)
+            ->causedBy(auth()->user())
+            ->log("Pedido #{$order->id} criado com {$request->total_items} produtos");
+
+        return redirect()->route('orders.show', $order);
+    }
 }

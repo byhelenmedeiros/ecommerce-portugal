@@ -165,6 +165,21 @@
 
   <p v-if="saving" class="text-sm text-gray-400">A guardar...</p>
 </div>
+<!-- Atividades Recentes -->
+<div v-if="activeTab === 'Atividades'" class="bg-white border rounded shadow-sm p-6 space-y-2">
+  <h2 class="text-lg font-semibold text-gray-800 mb-4">Atividades Recentes</h2>
+
+  <div v-if="activities.length">
+    <div v-for="activity in activities" :key="activity.id" class="text-sm text-gray-700 border-b py-2">
+      <p>{{ activity.description }}</p>
+      <p class="text-xs text-gray-400">
+        {{ new Date(activity.created_at).toLocaleString() }}
+      </p>
+    </div>
+  </div>
+  <div v-else class="text-sm text-gray-500">Sem atividades registadas.</div>
+</div>
+
 
 
     </div>
@@ -180,14 +195,15 @@ import { ref } from 'vue'
 const props = defineProps({
   cliente: Object,
   stats: Object,
-  allTags: Array
+  allTags: Array,
+  activities: Array
 })
 const cliente = props.cliente
 const allTags = ref(props.allTags)
 
 
 // Tabs disponíveis
-const tabs = ['Dados Pessoais', 'Moradas', 'Histórico de Pedidos', 'Etiquetas', 'Notas Internas']
+const tabs = ['Dados Pessoais', 'Moradas', 'Histórico de Pedidos', 'Etiquetas', 'Notas Internas', 'Atividades']
 const activeTab = ref(tabs[0])
 
 const newTagId = ref('')

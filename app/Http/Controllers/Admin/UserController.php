@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+use Spatie\Activitylog\Models\Activity;
 
 class UserController extends Controller
 {
@@ -34,6 +35,11 @@ class UserController extends Controller
 
         $allTags = Tag::select('id', 'name', 'color')->get();
 
+        $activities = Activity::where('subject_type', User::class)
+            ->where('subject_id', $user->id)
+            ->latest()
+            ->take(50)
+            ->get();
 
         // Estatísticas
         $totalPedidos = $user->orders->count();
@@ -50,6 +56,8 @@ class UserController extends Controller
                 'ultimo_pedido' => $ultimoPedido,
             ],
             'allTags' => $allTags,
+            'cliente' => $user,
+            'activities' => $activities,
         ]);
     }
 
@@ -70,6 +78,12 @@ class UserController extends Controller
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         }
+
+        activity()
+            ->performedOn($user)
+            ->causedBy(auth()->user())
+            ->log("Atualizou o perfil (nome/email/telefone)");
+
 
         $user->update($data);
 

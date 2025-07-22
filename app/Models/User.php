@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
 
@@ -31,7 +32,28 @@ class User extends Authenticatable
     'nif_on_invoice',
 ];
 
-        
+    /**
+     * Get the options for activity logging.
+     *
+     * @return \Spatie\Activitylog\LogOptions
+     */
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+            ->logOnly(['email', 'name'])
+            ->logOnlyDirty();
+    }
+
+  use LogsActivity;
+
+    protected static $logAttributes = ['name', 'email', 'phone'];
+    protected static $logName = 'cliente';
+    protected static $logOnlyDirty = true;
+
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return "Cliente {$this->name} foi {$eventName}";
+    }
   
 
     /**

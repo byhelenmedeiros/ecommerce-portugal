@@ -9,7 +9,8 @@ use App\Http\Controllers\Shop\OrderController;
 use App\Http\Controllers\Shop\WishlistController as ShopWishlistController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Shop\ProductController;
-
+use App\Http\Controllers\Shop\CheckoutController;
+use Inertia\Inertia;
 
 // Rotas de administração (apenas para admin)
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -43,4 +44,11 @@ Route::get('/shop/{product}', [ProductController::class, 'show'])->name('shop.pr
 
 Route::inertia('/cart', 'CartPage')->name('cart');
 
-
+Route::middleware(['auth'])->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    //rota de checkout sucess
+    Route::get('/checkout/success', function () {
+        return Inertia::render('CheckoutSuccessPage');
+    })->name('checkout.success');
+});

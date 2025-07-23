@@ -4,52 +4,64 @@ import { ref } from 'vue'
 export const useCart = defineStore('cart', () => {
   const cart = ref([])
 
-  function addToCart(product, quantity = 1) {
-    const existing = cart.value.find(item => item.id === product.id)
-
-    if (existing) {
-      existing.quantity += quantity
-    } else {
-      cart.value.push({ ...product, quantity })
+  const loadCartFromStorage = () => {
+    const stored = localStorage.getItem('cart')
+    try {
+      const parsed = stored ? JSON.parse(stored) : []
+      cart.value = Array.isArray(parsed) ? parsed : []
+    } catch (e) {
+      cart.value = []
     }
-
-     localStorage.setItem('cart', JSON.stringify(cart.value))
   }
 
-  function removeFromCart(productId) {
-    cart.value = cart.value.filter(item => item.id !== productId)
+  const saveCartToStorage = () => {
     localStorage.setItem('cart', JSON.stringify(cart.value))
   }
 
-  function getQuantity(productId) {
-    const item = cart.value.find(p => p.id === productId)
-    return item ? item.quantity : 1
-  }
-
-  function increaseQty(productId) {
-    const item = cart.value.find(p => p.id === productId)
-    if (item) item.quantity++
-  }
-
-  function decreaseQty(productId) {
-    const item = cart.value.find(p => p.id === productId)
-    if (item && item.quantity > 1) item.quantity--
-  }
-
-  function loadCartFromStorage() {
-    const stored = localStorage.getItem('cart')
-    if (stored) {
-      cart.value = JSON.parse(stored)
+  const addToCart = (product, quantity = 1) => {
+    const existing = cart.value.find(p => p.id === product.id)
+    if (existing) {
+      existing.quantity += quantity
+    } else {
+      cart.value.push({
+        id: product.id,
+        name: product.name,
+        image_url: product.image_url ?? null,
+        price: Number(product.price ?? 0),
+        quantity: Number(quantity),
+      })
     }
+    saveCartToStorage()
+  }
+
+  const increaseQty = (productId) => {
+    const item = cart.value.find(p => p.id === productId)
+    if (item) {
+      item.quantity++
+      saveCartToStorage()
+    }
+  }
+
+  const decreaseQty = (productId) => {
+    const item = cart.value.find(p => p.id === productId)
+    if (item && item.quantity > 1) {
+      item.quantity--
+      saveCartToStorage()
+    }
+  }
+
+  const removeFromCart = (productId) => {
+    cart.value = cart.value.filter(item => item.id !== productId)
+    saveCartToStorage()
   }
 
   return {
     cart,
+    loadCartFromStorage,
+    saveCartToStorage,
     addToCart,
-    removeFromCart,
-    getQuantity,
     increaseQty,
     decreaseQty,
-    loadCartFromStorage,
+    removeFromCart
   }
 })

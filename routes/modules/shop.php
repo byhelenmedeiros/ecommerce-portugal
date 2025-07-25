@@ -42,13 +42,10 @@ Route::get('/products/{product}', [\App\Http\Controllers\Admin\ProductController
 Route::get('/shop', [ProductController::class, 'index'])->name('shop.products.index');
 Route::get('/shop/{product}', [ProductController::class, 'show'])->name('shop.products.show');
 
+ 
 Route::inertia('/cart', 'CartPage')->name('cart');
-
 Route::middleware(['auth'])->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
-    //rota de checkout sucess
-    Route::get('/checkout/success', function () {
-        return Inertia::render('CheckoutSuccessPage');
-    })->name('checkout.success');
+    Route::get('/checkout/success', fn () => Inertia::render('CheckoutSuccessPage'))->name('checkout.success');
 });

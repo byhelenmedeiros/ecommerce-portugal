@@ -10,6 +10,7 @@ use App\Http\Controllers\Shop\WishlistController as ShopWishlistController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Shop\ProductController;
 use App\Http\Controllers\Shop\CheckoutController;
+use App\Http\Controllers\Shop\StripeController;
 use Inertia\Inertia;
 
 // Rotas de administração (apenas para admin)
@@ -49,3 +50,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
     Route::get('/checkout/success', fn () => Inertia::render('CheckoutSuccessPage'))->name('checkout.success');
 });
+
+Route::post('/checkout/create-stripe-session', [StripeController::class, 'create'])
+    ->middleware(['auth'])
+    ->name('stripe.session');

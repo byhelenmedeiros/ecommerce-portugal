@@ -81,6 +81,6 @@ class CheckoutController extends Controller
             ]);
         }
 
-        return redirect()->route('checkout.success')->with('success', 'Pedido #' . $orderNumber . ' realizado com sucesso!');
+return redirect()->route('stripe.session', ['order_id' => $order->id]);
     }
 }

@@ -54,3 +54,12 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/checkout/create-stripe-session', [StripeController::class, 'create'])
     ->middleware(['auth'])
     ->name('stripe.session');
+
+    Route::get('/pagamento/{order}', fn ($order) => Inertia::render('PaymentPage', ['orderId' => $order]))
+    ->middleware(['auth'])
+    ->name('payment.show');
+
+ Route::post(
+    '/checkout/create-payment-intent',
+    [\App\Http\Controllers\Shop\CheckoutController::class, 'createPaymentIntent']
+)->middleware('auth')->name('checkout.createPaymentIntent');

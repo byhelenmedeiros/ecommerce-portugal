@@ -1,9 +1,11 @@
 <template>
+  <Head />
+  <slot />
   <GuestLayout>
-    <section class="max-w-9xl mx-auto px-6 py-10 space-y-10">
+    <section class="max-w-6xl mx-auto px-6 py-10 space-y-10">
       <h1 class="text-3xl font-bold text-gray-800 mb-4">Finalizar Compra</h1>
 
-      <!-- Breadcrumbs estilo WooCommerce -->
+      <!-- Breadcrumbs -->
       <nav class="text-sm text-gray-500 mb-6">
         <ol class="flex space-x-2">
           <li><Link :href="route('cart')" class="text-green-700 hover:underline">Carrinho</Link></li>
@@ -14,204 +16,173 @@
         </ol>
       </nav>
 
-      <p v-if="!isLoggedIn" class="text-sm text-gray-500">
-        Já tem conta? <Link href="/login" class="text-green-700 underline">Inicie sessão</Link> ou preencha os dados abaixo para finalizar a sua compra.
-      </p>
-
-      <!-- Conteúdo principal -->
+      <!-- Conteúdo -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white p-8 rounded shadow">
-
-        <!-- Etapas -->
+        <!-- Formulário -->
         <div>
-          <!-- Etapa 1: Moradas -->
+          <!-- Etapa 1: Morada -->
           <div v-if="step === 1">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Morada de Entrega</h2>
+            <h2 class="text-xl font-semibold mb-4">Morada de Entrega</h2>
             <form @submit.prevent="salvarMoradas" class="space-y-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700">Rua</label>
-                <input v-model="form.address" type="text" required class="input input-bordered w-full mt-1" />
+                <label class="block text-sm font-medium">Rua</label>
+                <input v-model="form.address" type="text" required class="input w-full" />
               </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700">Porta</label>
-                <input v-model="form.door" type="text" class="input input-bordered w-full mt-1" />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700">Andar</label>
-                <input v-model="form.floor" type="text" class="input input-bordered w-full mt-1" />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700">Localidade</label>
-                <input v-model="form.location" type="text" required class="input input-bordered w-full mt-1" />
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700">Código Postal</label>
-                  <input v-model="form.postal_code" type="text" required class="input input-bordered w-full mt-1" />
+                  <label class="block text-sm font-medium">Código Postal</label>
+                  <input v-model="form.postal_code" type="text" required class="input w-full" />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700">Cidade</label>
-                  <input v-model="form.city" type="text" required class="input input-bordered w-full mt-1" />
+                  <label class="block text-sm font-medium">Cidade</label>
+                  <input v-model="form.city" type="text" required class="input w-full" />
                 </div>
               </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700">Distrito</label>
-                  <input v-model="form.district" type="text" required class="input input-bordered w-full mt-1" />
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700">País</label>
-                  <input v-model="form.country" type="text" required class="input input-bordered w-full mt-1" />
-                </div>
-              </div>
-
-              <div>
-                <label class="flex items-center gap-2 text-sm">
-                  <input type="checkbox" v-model="usarMesmaMorada" /> Usar esta mesma morada como fiscal
-                </label>
-              </div>
-
-              <div v-if="!usarMesmaMorada" class="pt-4">
-                <h3 class="font-medium text-gray-700 mb-2">Morada Fiscal</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700">Rua</label>
-                    <input v-model="form.billing_address" type="text" class="input input-bordered w-full mt-1" />
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700">Localidade</label>
-                    <input v-model="form.billing_location" type="text" class="input input-bordered w-full mt-1" />
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700">Código Postal</label>
-                    <input v-model="form.billing_postal_code" type="text" class="input input-bordered w-full mt-1" />
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700">Cidade</label>
-                    <input v-model="form.billing_city" type="text" class="input input-bordered w-full mt-1" />
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex justify-between gap-2 pt-6">
-                <button type="button" disabled class="btn bg-gray-200 text-gray-500 w-1/2 rounded-full">Voltar</button>
-                <button type="submit" class="btn bg-green-600 hover:bg-green-700 text-white w-1/2 rounded-full">Guardar e Continuar</button>
+              <div class="flex justify-end pt-6">
+                <button type="submit" class="btn bg-green-600 text-white w-full rounded-full">Guardar e Continuar</button>
               </div>
             </form>
           </div>
 
-          <!-- Etapa 2: Pagamento -->
+          <!-- Etapa 2: Stripe Elements -->
           <div v-else-if="step === 2">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Pagamento</h2>
-            <form @submit.prevent="confirmarPedido" class="space-y-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700">Método de Pagamento</label>
-                <select v-model="form.payment_method" required class="input input-bordered w-full mt-1">
-                  <option disabled value="">Escolha o método de pagamento</option>
-                  <option value="mbway">MB Way</option>
-                  <option value="multibanco">Multibanco</option>
-                  <option value="visa">Cartão Visa</option>
-                  <option value="paypal">PayPal</option>
-                </select>
-              </div>
-              <div class="text-right pt-4">
-                <button type="submit" class="btn bg-green-700 hover:bg-green-800 text-white w-full rounded-full">
-                  Confirmar Pedido e Pagar
-                </button>
-              </div>
-            </form>
+            <h2 class="text-xl font-semibold mb-4">Pagamento</h2>
+            <!-- Sempre renderiza o container para Stripe -->
+            <div ref="cardEl" class="border p-4 rounded mb-4">
+              <div v-if="!stripeLoaded" class="text-gray-500">Carregando pagamento seguro...</div>
+            </div>
+            <!-- Botão após carregar Stripe -->
+            <button
+    class="btn bg-green-700 hover:bg-green-800 text-white w-full rounded-full mt-4"
+    :disabled="!stripeLoaded || loading"
+    @click="handlePayment"
+  >
+    <span v-if="!loading">Pagar €{{ total.toFixed(2) }}</span>
+    <span v-else>Processando…</span>
+  </button>
           </div>
         </div>
 
         <!-- Resumo do Pedido -->
         <div>
-          <h2 class="text-xl font-semibold text-gray-800 mb-4">Resumo do Pedido</h2>
+          <h2 class="text-xl font-semibold mb-4">Resumo do Pedido</h2>
           <ul class="divide-y divide-gray-200 text-sm">
             <li v-for="item in cart" :key="item.id" class="py-3 flex justify-between">
               <span>{{ item.name }} x{{ item.quantity }}</span>
-              <span class="text-green-700 font-semibold">€{{ (item.price * item.quantity).toFixed(2) }}</span>
+              <span class="text-green-700">€{{ (item.price * item.quantity).toFixed(2) }}</span>
             </li>
           </ul>
-          <div class="pt-6 border-t mt-4 text-right font-bold text-lg">
-            Total: <span class="text-green-700">€{{ total.toFixed(2) }}</span>
-          </div>
+          <div class="pt-6 border-t font-bold text-right">Total: €{{ total.toFixed(2) }}</div>
         </div>
       </div>
     </section>
   </GuestLayout>
 </template>
-
+ 
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue'
-import { useForm, usePage, Link } from '@inertiajs/vue3'
-import { computed, onMounted, ref, watch } from 'vue'
+import { Link, useForm, usePage, router, Head } from '@inertiajs/vue3'
+import { ref, computed, watch, nextTick } from 'vue'
 import { useCart } from '@/stores/cart'
+import { loadStripe } from '@stripe/stripe-js'
+import axios from 'axios'
+import GuestLayout from '@/Layouts/GuestLayout.vue'
 
-const page = usePage()
-const user = page.props.auth?.user
-const isLoggedIn = computed(() => !!user)
+// Props
+const { auth, order } = usePage().props
 
+// Cart
 const cartStore = useCart()
-const cart = computed(() => cartStore.cart ?? [])
+cartStore.loadCartFromStorage()
+const cart = computed(() => cartStore.cart)
+const total = computed(() => cart.value.reduce((sum, i) => sum + i.price * i.quantity, 0))
 
-onMounted(() => {
-  cartStore.loadCartFromStorage()
-})
+// Step control
+const step = ref(order ? 2 : 1)
 
-const total = computed(() => cart.value.reduce((sum, item) => sum + item.price * item.quantity, 0))
-
-const temMoradas = ref(!!(user?.morada_entrega || user?.morada_fiscal))
-const usarMesmaMorada = ref(true)
-const step = ref(temMoradas.value ? 2 : 1)
-
+// Address form data
 const form = useForm({
-  address: user?.morada_entrega || '',
-  door: '',
-  floor: '',
-  location: '',
-  postal_code: '',
-  city: '',
-  district: '',
-  country: '',
-  billing_address: user?.morada_fiscal || '',
-  billing_location: '',
-  billing_postal_code: '',
-  billing_city: '',
-  payment_method: '',
-  items: computed(() => cart.value.map(item => ({
-    id: item.id,
-    quantity: item.quantity,
-    price: item.price
-  }))).value,
+  address: auth.user?.morada_entrega || '',
+  postal_code: auth.user?.postal_code || '',
+  city: auth.user?.city || '',
+  items: cart.value.map(i => ({ id: i.id, quantity: i.quantity, price: i.price }))
 })
+function salvarMoradas() {
+  step.value = 2
+}
 
-watch(usarMesmaMorada, (val) => {
-  if (val) form.billing_address = form.address
-})
+// Stripe state
+const stripeLoaded = ref(false)
+const stripe = ref(null)
+const elements = ref(null)
+const cardElement = ref(null)
+const clientSecret = ref(null)
+const loading = ref(false)
+const cardEl = ref(null)
 
-const salvarMoradas = () => {
-  if (form.address && (usarMesmaMorada.value || form.billing_address)) {
-    if (usarMesmaMorada.value) {
-      form.billing_address = form.address
+// Initialize Stripe after step=2 and DOM update
+async function initStripe() {
+  console.log('🔄 Iniciando Stripe e criando pedido')
+  const key = import.meta.env.VITE_STRIPE_KEY
+  console.log('📥 Publishable Key:', key)
+  stripe.value = await loadStripe(key)
+  elements.value = stripe.value.elements()
+  cardElement.value = elements.value.create('card', { style: { base: { fontSize: '16px' } } })
+  console.log('🔧 cardEl ref:', cardEl.value)
+  cardElement.value.mount(cardEl.value)
+  console.log('✅ Stripe Elements montado')
+
+  try {
+    // Cria o pedido e o PaymentIntent em um único endpoint
+    const payload = {
+      address: form.address,
+      postal_code: form.postal_code,
+      city: form.city,
+      items: form.items
     }
-    step.value = 2
+    console.log('📡 Criando pedido e PaymentIntent, payload:', payload)
+    const { data } = await axios.post('/checkout/create-payment-intent', payload)
+    clientSecret.value = data.client_secret
+    console.log('✅ client_secret recebido:', clientSecret.value)
+    stripeLoaded.value = true
+  } catch (err) {
+    console.error('❌ Erro ao criar PaymentIntent:', err)
   }
 }
 
-const confirmarPedido = () => {
-  form.post(route('checkout.store'), {
-    onSuccess: () => {
-      localStorage.removeItem('cart')
-      window.location.href = route('checkout.success')
+watch(step, async val => {
+  if (val === 2) {
+    await nextTick()
+    await nextTick()
+    console.log('👀 step=2, DOM ready')
+    initStripe()
+  }
+})
+
+// Payment handler
+async function handlePayment() {
+  loading.value = true
+  console.log('▶️ handlePayment, clientSecret:', clientSecret.value)
+  try {
+    const { error, paymentIntent } = await stripe.value.confirmCardPayment(clientSecret.value, {
+      payment_method: { card: cardElement.value }
+    })
+    if (error) {
+      console.error('❌ confirmCardPayment error:', error)
+      alert(error.message)
+      loading.value = false
+    } else {
+      console.log('✅ Pagamento concluído:', paymentIntent)
+      cartStore.clearCart()
+      window.location.href = router.visit(route('checkout.success'))
     }
-  })
+  } catch (err) {
+    console.error('❌ handlePayment exception:', err)
+    loading.value = false
+  }
 }
 </script>
 
 <style scoped>
-.input {
-  @apply border-gray-300 focus:ring-green-600 focus:border-green-600 rounded-full;
-}
-.btn {
-  @apply py-2 px-4 font-semibold rounded-full transition-all;
-}
+.input { @apply border-gray-300 focus:ring-green-600 focus:border-green-600 rounded-full }
+.btn { @apply py-2 px-4 font-semibold rounded-full transition-all }
 </style>
